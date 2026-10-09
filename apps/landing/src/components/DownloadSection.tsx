@@ -88,7 +88,7 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
 
 const POS_APP_URL =
   import.meta.env.VITE_POS_URL ||
-  (import.meta.env.DEV ? "http://localhost:5173" : "/app");
+  (import.meta.env.DEV ? "http://localhost:5173" : "https://app-kasir-terbuka.vercel.app");
 
 export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) {
   const detected = getDetectedPlatform(initialPlatform);
