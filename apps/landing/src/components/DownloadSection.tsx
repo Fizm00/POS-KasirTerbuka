@@ -42,8 +42,9 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
     return {
       platform: "android",
       label: "Download for Android",
-      versionText: "Version 1.0.0 (APK)",
-      href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
+      versionText: "Version 1.0.0, 4.7 MB (APK)",
+      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
+      filename: "Kasir-Terbuka-1.0.0.apk",
     };
   }
   if (typeof navigator !== "undefined") {
@@ -52,8 +53,9 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
       return {
         platform: "android",
         label: "Download for Android",
-        versionText: "Version 1.0.0 (APK)",
-        href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
+        versionText: "Version 1.0.0, 4.7 MB (APK)",
+        href: "/downloads/Kasir-Terbuka-1.0.0.apk",
+        filename: "Kasir-Terbuka-1.0.0.apk",
       };
     }
     if (ua.includes("mac")) {
@@ -113,7 +115,8 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
       name: "Android (.apk)",
       type: "link",
       actionText: "Download",
-      href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
+      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
+      filename: "Kasir-Terbuka-1.0.0.apk",
     },
     {
       name: "iOS (.ipa)",
