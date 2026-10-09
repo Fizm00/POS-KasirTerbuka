@@ -53,7 +53,7 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
   return {
     platform: "windows",
     label: "Unduh untuk Windows",
-    versionText: "Versi 1.0.0, 84 MB",
+    versionText: "Versi 1.0.0, 2.4 MB",
     href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
     filename: "Kasir-Terbuka-Setup-1.0.0.exe",
   };
