@@ -15,7 +15,8 @@ export function isTauri(): boolean {
         win.location?.protocol === "tauri:" ||
         Boolean(win.__TAURI_INTERNALS__) ||
         Boolean(win.__TAURI__) ||
-        Boolean(win.isTauri)
+        Boolean(win.isTauri) ||
+        Boolean(win.chrome?.webview)
       ) {
         return true;
       }
