@@ -86,9 +86,18 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
   };
 }
 
-const POS_APP_URL =
-  import.meta.env.VITE_POS_URL ||
-  (import.meta.env.DEV ? "http://localhost:5173" : "pos-kasir-terbuka-6sbr.vercel.app");
+function normalizePosAppUrl(rawUrl?: string): string {
+  const fallback = import.meta.env.DEV
+    ? "http://localhost:5173"
+    : "https://pos-kasir-terbuka-6sbr.vercel.app";
+  const url = (rawUrl || fallback).trim();
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  return `https://${url}`;
+}
+
+const POS_APP_URL = normalizePosAppUrl(import.meta.env.VITE_POS_URL);
 
 export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) {
   const detected = getDetectedPlatform(initialPlatform);
