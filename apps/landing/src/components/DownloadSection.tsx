@@ -15,9 +15,8 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
     return {
       platform: "android",
       label: "Unduh untuk Android",
-      versionText: "Versi 1.0.0, 48 MB",
-      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-      filename: "Kasir-Terbuka-1.0.0.apk",
+      versionText: "Versi 1.0.0 (APK)",
+      href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
     };
   }
   if (typeof navigator !== "undefined") {
@@ -26,9 +25,8 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
       return {
         platform: "android",
         label: "Unduh untuk Android",
-        versionText: "Versi 1.0.0, 48 MB",
-        href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-        filename: "Kasir-Terbuka-1.0.0.apk",
+        versionText: "Versi 1.0.0 (APK)",
+        href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
       };
     }
     if (ua.includes("mac")) {
@@ -88,8 +86,7 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
       name: "Android (.apk)",
       type: "link",
       actionText: "Unduh",
-      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-      filename: "Kasir-Terbuka-1.0.0.apk",
+      href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
     },
     {
       name: "iOS (.ipa)",
