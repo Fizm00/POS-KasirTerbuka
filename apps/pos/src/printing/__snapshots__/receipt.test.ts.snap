@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`receipt model builder > builds 58mm (32 chars) receipt matching snapshot structure 1`] = `
+"          Toko Berkah           
+   Jl. Mawar No. 12, Magelang   
+         0812-3456-7890         
+--------------------------------
+INV-20261009-0012
+09/10/2026 21:32     Kasir: Rina
+--------------------------------
+Kopi Susu Gula Aren
+  2 x 15.000              30.000
+Nasi Goreng Spesial
+  1 x 22.000              22.000
+--------------------------------
+Subtotal                  52.000
+Diskon                     5.000
+TOTAL                     47.000
+Tunai                     50.000
+Kembalian                  3.000
+--------------------------------
+      Terima kasih, sampai      
+          jumpa lagi!           "
+`;
+
+exports[`receipt model builder > builds 80mm (48 chars) receipt matching snapshot structure 1`] = `
+"                  Toko Berkah                   
+           Jl. Mawar No. 12, Magelang           
+                 0812-3456-7890                 
+------------------------------------------------
+INV-20261009-0012
+09/10/2026 21:32                     Kasir: Rina
+------------------------------------------------
+Kopi Susu Gula Aren
+  2 x 15.000                              30.000
+Nasi Goreng Spesial
+  1 x 22.000                              22.000
+------------------------------------------------
+Subtotal                                  52.000
+Diskon                                     5.000
+TOTAL                                     47.000
+Tunai                                     50.000
+Kembalian                                  3.000
+------------------------------------------------
+              Terima kasih, sampai              
+                  jumpa lagi!                   "
+`;

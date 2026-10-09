@@ -1,0 +1,43 @@
+﻿@import "@fontsource/newsreader/300.css";
+@import "@fontsource/newsreader/400.css";
+@import "@fontsource/newsreader/500.css";
+@import "@fontsource/plus-jakarta-sans/400.css";
+@import "@fontsource/plus-jakarta-sans/500.css";
+@import "@fontsource/plus-jakarta-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "tailwindcss";
+
+:root {
+  --ink: #0e2b25;
+  --pine: #1f6f5c;
+  --paper: #fbfaf7;
+  --stone: #e6e3da;
+  --text: #1a1a18;
+  --text-muted: #5f5e58;
+  --on-ink: #f1efe8;
+  --on-ink-muted: #a9b7b1;
+  --brass: #b08a57;
+}
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  color: var(--text);
+  font-family:
+    "Plus Jakarta Sans",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif-display {
+  font-family: "Newsreader", Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+.font-receipt-mono {
+  font-family: "IBM Plex Mono", "Courier New", monospace;
+  font-variant-numeric: tabular-nums;
+}

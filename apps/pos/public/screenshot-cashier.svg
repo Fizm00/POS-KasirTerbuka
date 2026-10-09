@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 800" width="1280" height="800" style="background:#F7F6F2;font-family:system-ui,-apple-system,sans-serif;">
+  <!-- App Shell Header -->
+  <rect x="0" y="0" width="1280" height="52" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+  <text x="24" y="32" font-size="16" font-weight="600" fill="#1C1B19">Toko Berkah</text>
+  <!-- Nav Pills -->
+  <rect x="160" y="8" width="70" height="36" rx="8" fill="#1F6F5C" />
+  <text x="178" y="31" font-size="14" font-weight="500" fill="#FFFFFF">Kasir</text>
+  <text x="254" y="31" font-size="14" font-weight="500" fill="#6B6A64">Riwayat</text>
+  <text x="334" y="31" font-size="14" font-weight="500" fill="#6B6A64">Produk</text>
+  <text x="410" y="31" font-size="14" font-weight="500" fill="#6B6A64">Laporan</text>
+  <text x="490" y="31" font-size="14" font-weight="500" fill="#6B6A64">Pengaturan</text>
+
+  <!-- Right Header Info -->
+  <text x="1100" y="31" font-size="14" font-weight="500" fill="#1C1B19">Kasir: Rina</text>
+  <rect x="1190" y="8" width="66" height="36" rx="8" fill="#FFFFFF" stroke="#D1CECE" stroke-width="1" />
+  <text x="1208" y="31" font-size="14" font-weight="500" fill="#1C1B19">Kunci</text>
+
+  <!-- Main Content Layout (62% Left, 38% Right) -->
+  <!-- LEFT: Product Catalog & Search -->
+  <g transform="translate(24, 76)">
+    <!-- Search Bar -->
+    <rect x="0" y="0" width="740" height="48" rx="8" fill="#FFFFFF" stroke="#D1CECE" stroke-width="1" />
+    <text x="16" y="30" font-size="15" fill="#6B6A64">Cari produk atau scan barcode (F2)</text>
+
+    <!-- Category Chips -->
+    <g transform="translate(0, 64)">
+      <rect x="0" y="0" width="80" height="36" rx="8" fill="#1F6F5C" />
+      <text x="18" y="23" font-size="14" font-weight="500" fill="#FFFFFF">Semua</text>
+      <rect x="92" y="0" width="96" height="36" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+      <text x="108" y="23" font-size="14" font-weight="500" fill="#1C1B19">Makanan</text>
+      <rect x="200" y="0" width="96" height="36" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+      <text x="216" y="23" font-size="14" font-weight="500" fill="#1C1B19">Minuman</text>
+      <rect x="308" y="0" width="80" height="36" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+      <text x="326" y="23" font-size="14" font-weight="500" fill="#1C1B19">Snack</text>
+    </g>
+
+    <!-- Product Grid (3 Columns) -->
+    <g transform="translate(0, 116)">
+      <!-- Card 1 -->
+      <g transform="translate(0, 0)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#1F6F5C" stroke-width="2" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Kopi Susu Aren</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">KOP-001</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1F6F5C">Rp 15.000</text>
+        <rect x="186" y="12" width="36" height="24" rx="4" fill="#E8F4F0" />
+        <text x="194" y="28" font-size="12" font-weight="700" fill="#1F6F5C">2x</text>
+      </g>
+      <!-- Card 2 -->
+      <g transform="translate(252, 0)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#1F6F5C" stroke-width="2" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Nasi Goreng Spesial</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">NAS-001</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1F6F5C">Rp 22.000</text>
+        <rect x="186" y="12" width="36" height="24" rx="4" fill="#E8F4F0" />
+        <text x="194" y="28" font-size="12" font-weight="700" fill="#1F6F5C">1x</text>
+      </g>
+      <!-- Card 3 -->
+      <g transform="translate(504, 0)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Es Teh Manis</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">TEH-001</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1C1B19">Rp 5.000</text>
+        <text x="160" y="100" font-size="12" fill="#6B6A64">Stok: 40</text>
+      </g>
+      <!-- Card 4 -->
+      <g transform="translate(0, 136)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Mie Goreng Jawa</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">MIE-001</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1C1B19">Rp 18.000</text>
+        <text x="160" y="100" font-size="12" fill="#6B6A64">Stok: 12</text>
+      </g>
+      <!-- Card 5 -->
+      <g transform="translate(252, 136)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Pisang Goreng Keju</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">PSG-001</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1C1B19">Rp 12.000</text>
+        <text x="160" y="100" font-size="12" fill="#B7791F">Stok: 3</text>
+      </g>
+      <!-- Card 6 -->
+      <g transform="translate(504, 136)">
+        <rect x="0" y="0" width="236" height="120" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+        <text x="14" y="28" font-size="15" font-weight="600" fill="#1C1B19">Kopi Hitam Tubruk</text>
+        <text x="14" y="50" font-size="12" fill="#6B6A64">KOP-002</text>
+        <text x="14" y="100" font-size="16" font-weight="700" fill="#1C1B19">Rp 8.000</text>
+        <text x="160" y="100" font-size="12" fill="#6B6A64">Stok: 25</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- RIGHT: Cart Panel (38%) -->
+  <g transform="translate(790, 76)">
+    <rect x="0" y="0" width="466" height="696" rx="8" fill="#FFFFFF" stroke="#E3E1DA" stroke-width="1" />
+    
+    <!-- Cart Header -->
+    <text x="24" y="38" font-size="18" font-weight="600" fill="#1C1B19">Pesanan (2 produk)</text>
+    <text x="370" y="38" font-size="14" font-weight="500" fill="#B3261E">Kosongkan</text>
+    <line x1="0" y1="56" x2="466" y2="56" stroke="#E3E1DA" stroke-width="1" />
+
+    <!-- Cart Item 1 -->
+    <g transform="translate(24, 76)">
+      <text x="0" y="20" font-size="15" font-weight="600" fill="#1C1B19">Kopi Susu Aren</text>
+      <text x="0" y="42" font-size="13" fill="#6B6A64">2 x Rp 15.000</text>
+      <text x="320" y="32" font-size="16" font-weight="600" fill="#1C1B19">Rp 30.000</text>
+    </g>
+    <line x1="24" y1="140" x2="442" y2="140" stroke="#F0EEE6" stroke-width="1" />
+
+    <!-- Cart Item 2 -->
+    <g transform="translate(24, 156)">
+      <text x="0" y="20" font-size="15" font-weight="600" fill="#1C1B19">Nasi Goreng Spesial</text>
+      <text x="0" y="42" font-size="13" fill="#6B6A64">1 x Rp 22.000</text>
+      <text x="320" y="32" font-size="16" font-weight="600" fill="#1C1B19">Rp 22.000</text>
+    </g>
+
+    <!-- Cart Footer (Pinned) -->
+    <g transform="translate(24, 460)">
+      <line x1="0" y1="0" x2="418" y2="0" stroke="#E3E1DA" stroke-width="1" />
+      <text x="0" y="30" font-size="14" fill="#6B6A64">Subtotal</text>
+      <text x="340" y="30" font-size="14" font-weight="600" fill="#1C1B19">Rp 52.000</text>
+
+      <text x="0" y="60" font-size="14" fill="#6B6A64">Diskon</text>
+      <text x="332" y="60" font-size="14" font-weight="600" fill="#B3261E">- Rp 5.000</text>
+
+      <text x="0" y="112" font-size="18" font-weight="600" fill="#1C1B19">Total</text>
+      <text x="230" y="116" font-size="32" font-weight="700" fill="#1C1B19">Rp 47.000</text>
+
+      <!-- Pay Button -->
+      <rect x="0" y="150" width="418" height="56" rx="8" fill="#1F6F5C" />
+      <text x="136" y="185" font-size="18" font-weight="600" fill="#FFFFFF">Bayar Rp 47.000  (F9)</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+:root {
+  --bg: #f7f6f2;
+  --surface: #ffffff;
+  --border: #e3e1da;
+  --border-strong: #c9c6bc;
+  --text: #1c1b19;
+  --text-muted: #6b6a64;
+  --primary: #1f6f5c;
+  --primary-hover: #185a4a;
+  --primary-soft: #e4f0ec;
+  --warning: #b7791f;
+  --warning-soft: #f8efd9;
+  --danger: #b3261e;
+  --danger-soft: #fbe9e7;
+
+  --font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --radius-control: 8px;
+  --radius-modal: 12px;
+  --shadow-modal: 0 8px 24px rgba(28, 27, 25, 0.12);
+  --overlay-bg: rgba(28, 27, 25, 0.4);
+}

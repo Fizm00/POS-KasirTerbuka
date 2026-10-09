@@ -1,0 +1,21 @@
+{
+  "name": "pos-cashier-monorepo",
+  "private": true,
+  "scripts": {
+    "dev:pos": "pnpm --filter pos dev",
+    "dev:landing": "pnpm --filter landing dev",
+    "build:pos": "pnpm --filter pos build",
+    "build:landing": "pnpm --filter landing build",
+    "preview:pos": "pnpm --filter pos preview",
+    "preview:landing": "pnpm --filter landing preview",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "format": "prettier --write .",
+    "tauri": "pnpm --filter pos tauri",
+    "cap": "pnpm --filter pos cap"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}
