@@ -17,7 +17,7 @@ export const LockScreen: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [pinDigits, setPinDigits] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [isVerifying, setIsVerifying] = useState<boolean>(false);
+  const pinDigitsRef = React.useRef<string>("");
 
   // Load store settings and active users
   useEffect(() => {
@@ -38,54 +38,67 @@ export const LockScreen: React.FC = () => {
 
   const attemptUnlock = React.useCallback(
     async (candidatePin: string) => {
-      if (!selectedUser || isVerifying) return;
-      setIsVerifying(true);
+      if (!selectedUser) return;
 
       try {
         const isValid = await verifyPin(candidatePin, selectedUser.pinHash);
         if (isValid) {
           unlock(selectedUser);
           navigate("/kasir", { replace: true });
-        } else {
-          // If 4 digits failed, wait if user might be typing a 5-6 digit PIN
-          if (candidatePin.length < 6) {
-            setIsVerifying(false);
-            return;
+          return;
+        }
+
+        // If 6 digits or more, show error immediately
+        if (candidatePin.length >= 6) {
+          if (pinDigitsRef.current === candidatePin) {
+            setErrorMessage(t("lock.pinIncorrect"));
+            pinDigitsRef.current = "";
+            setPinDigits("");
           }
-          // At 6 digits or explicit failure, show error and clear dots
-          setErrorMessage(t("lock.pinIncorrect"));
-          setPinDigits("");
+        } else {
+          // If 4-5 digits failed and no new digits entered after delay, show error
+          setTimeout(() => {
+            if (pinDigitsRef.current === candidatePin) {
+              setErrorMessage(t("lock.pinIncorrect"));
+              pinDigitsRef.current = "";
+              setPinDigits("");
+            }
+          }, 1200);
         }
       } catch {
-        setErrorMessage(t("lock.pinIncorrect"));
-        setPinDigits("");
-      } finally {
-        setIsVerifying(false);
+        if (candidatePin.length >= 6 && pinDigitsRef.current === candidatePin) {
+          setErrorMessage(t("lock.pinIncorrect"));
+          pinDigitsRef.current = "";
+          setPinDigits("");
+        }
       }
     },
-    [selectedUser, isVerifying, unlock, navigate]
+    [selectedUser, unlock, navigate]
   );
 
   const handleDigitPress = React.useCallback(
     (digit: string) => {
-      if (isVerifying || pinDigits.length >= 6) return;
-      const nextDigits = pinDigits + digit;
+      if (pinDigitsRef.current.length >= 6) return;
+      const nextDigits = pinDigitsRef.current + digit;
+      pinDigitsRef.current = nextDigits;
       setPinDigits(nextDigits);
       setErrorMessage("");
 
-      // Auto verify if reached 4 to 6 digits and matches length
+      // Auto verify if reached 4 to 6 digits
       if (nextDigits.length >= 4) {
         attemptUnlock(nextDigits);
       }
     },
-    [isVerifying, pinDigits, attemptUnlock]
+    [attemptUnlock]
   );
 
   const handleBackspace = React.useCallback(() => {
-    if (isVerifying || pinDigits.length === 0) return;
-    setPinDigits((prev) => prev.slice(0, -1));
+    if (pinDigitsRef.current.length === 0) return;
+    const nextDigits = pinDigitsRef.current.slice(0, -1);
+    pinDigitsRef.current = nextDigits;
+    setPinDigits(nextDigits);
     setErrorMessage("");
-  }, [isVerifying, pinDigits.length]);
+  }, []);
 
   // Listen to physical keyboard numeric input
   useEffect(() => {
@@ -118,6 +131,7 @@ export const LockScreen: React.FC = () => {
               type="button"
               onClick={() => {
                 setSelectedUser(null);
+                pinDigitsRef.current = "";
                 setPinDigits("");
                 setErrorMessage("");
               }}
@@ -141,6 +155,7 @@ export const LockScreen: React.FC = () => {
                   type="button"
                   onClick={() => {
                     setSelectedUser(u);
+                    pinDigitsRef.current = "";
                     setPinDigits("");
                     setErrorMessage("");
                   }}
