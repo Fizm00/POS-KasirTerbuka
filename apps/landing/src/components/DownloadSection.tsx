@@ -86,6 +86,10 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
   };
 }
 
+const POS_APP_URL =
+  import.meta.env.VITE_POS_URL ||
+  (import.meta.env.DEV ? "http://localhost:5173" : "/app");
+
 export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) {
   const detected = getDetectedPlatform(initialPlatform);
 
@@ -127,7 +131,7 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
       name: "Install from browser (PWA)",
       type: "button",
       actionText: "Open app",
-      href: "/",
+      href: POS_APP_URL,
     },
   ];
 
@@ -183,6 +187,8 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
                 {p.type === "button" && p.href && (
                   <a
                     href={p.href}
+                    target={p.href.startsWith("http") ? "_blank" : undefined}
+                    rel={p.href.startsWith("http") ? "noopener noreferrer" : undefined}
                     className="min-h-[48px] h-9 px-4 rounded border border-[#E6E3DA] bg-[#FBFAF7] hover:bg-white text-[#1A1A18] font-medium text-xs sm:text-sm inline-flex items-center justify-center transition-colors"
                   >
                     {p.actionText}

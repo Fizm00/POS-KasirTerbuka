@@ -434,8 +434,11 @@
     },
     "app": {
       "title": "Aplikasi",
-      "statusStandalone": "Aplikasi terpasang (mode mandiri/standalone)",
+      "statusDesktop": "Aplikasi desktop terpasang (Windows / Native)",
+      "statusMobile": "Aplikasi seluler terpasang (Android / Native)",
+      "statusStandalone": "Aplikasi terpasang (mode mandiri / PWA)",
       "statusBrowser": "Berjalan di peramban web",
+      "nativeHint": "Berjalan secara lokal di perangkat Anda tanpa dependensi server atau akun cloud.",
       "installButton": "Pasang di perangkat",
       "installHint": "Pasang Kasir Terbuka ke layar utama atau desktop untuk akses cepat dan layar penuh.",
       "installPromptAlert": "Untuk memasang aplikasi dari browser, klik menu browser (titik tiga di kanan atas) lalu pilih 'Pasang Kasir Terbuka' atau 'Install app'.",

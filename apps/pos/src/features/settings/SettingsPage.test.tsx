@@ -403,4 +403,26 @@ describe("SettingsPage & Backup/Restore", () => {
     const reprintBtn = screen.getByRole("button", { name: /Cetak ulang struk terakhir/i });
     expect(reprintBtn).toBeInTheDocument();
   });
+
+  it("displays native desktop status and hides install prompt when running in Tauri", async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).__TAURI_INTERNALS__ = {};
+
+    render(
+      <MemoryRouter>
+        <SettingsPage />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: /Aplikasi/i })).toBeInTheDocument();
+    expect(
+      screen.getByText(/Aplikasi desktop terpasang \(Windows \/ Native\)/i)
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Pasang di perangkat/i })
+    ).not.toBeInTheDocument();
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (window as any).__TAURI_INTERNALS__;
+  });
 });

@@ -65,4 +65,25 @@ describe("platform detection", () => {
     expect(platform.isBrowser()).toBe(true);
     expect(platform.getPlatform()).toBe("browser");
   });
+
+  it("detects tauri when __TAURI_INTERNALS__ or __TAURI__ exists on window", () => {
+    vi.mocked(tauriCore.isTauri).mockReturnValue(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (window as any).__TAURI_INTERNALS__ = {};
+
+    expect(platform.isTauri()).toBe(true);
+    expect(platform.isInstalled()).toBe(true);
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (window as any).__TAURI_INTERNALS__;
+  });
+
+  it("detects installed status for PWA, desktop, and mobile", () => {
+    vi.mocked(tauriCore.isTauri).mockReturnValue(true);
+    expect(platform.isInstalled()).toBe(true);
+
+    vi.mocked(tauriCore.isTauri).mockReturnValue(false);
+    vi.mocked(Capacitor.isNativePlatform).mockReturnValue(true);
+    expect(platform.isInstalled()).toBe(true);
+  });
 });

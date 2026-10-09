@@ -15,7 +15,7 @@ import { BackupConfirmModal } from "./BackupConfirmModal";
 import { ChangePinModal } from "./ChangePinModal";
 import { printerService } from "../../printing/printerService";
 import type { PrinterDriverId } from "../../printing/drivers/types";
-import { isCapacitor } from "../../lib/platform";
+import { isTauri, isCapacitor, isAndroid, isPwa } from "../../lib/platform";
 import { t } from "../../i18n";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -36,6 +36,17 @@ export const SettingsPage: React.FC = () => {
       Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches)
   );
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+
+  const isDesktop = isTauri();
+  const isMobile = isCapacitor() || isAndroid();
+  const isInstalledApp = isDesktop || isMobile || isPwa() || isStandalone;
+
+  const getAppStatus = () => {
+    if (isDesktop) return t("settings.app.statusDesktop");
+    if (isMobile) return t("settings.app.statusMobile");
+    if (isPwa() || isStandalone) return t("settings.app.statusStandalone");
+    return t("settings.app.statusBrowser");
+  };
 
   // Toko form state
   const [storeName, setStoreName] = useState("");
@@ -740,13 +751,16 @@ export const SettingsPage: React.FC = () => {
       <section className="space-y-4 pb-8">
         <div>
           <h2 className="text-lg font-semibold text-[var(--text)]">{t("settings.app.title")}</h2>
-          <p className="text-sm text-[var(--text-muted)] mt-1">
-            {isStandalone ? t("settings.app.statusStandalone") : t("settings.app.statusBrowser")}
+          <p className="text-sm font-medium text-[var(--text)] mt-1">
+            {getAppStatus()}
+          </p>
+          <p className="text-xs text-[var(--text-muted)] mt-0.5">
+            {isInstalledApp ? t("settings.app.nativeHint") : t("settings.app.installHint")}
           </p>
         </div>
 
-        {!isStandalone && (
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+        {!isInstalledApp && (
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-1">
             <Button
               variant="secondary"
               onClick={handleInstallPwa}
@@ -755,9 +769,6 @@ export const SettingsPage: React.FC = () => {
               <Download className="w-4 h-4" aria-hidden="true" />
               <span>{t("settings.app.installButton")}</span>
             </Button>
-            <span className="text-xs text-[var(--text-muted)]">
-              {t("settings.app.installHint")}
-            </span>
           </div>
         )}
       </section>

@@ -6,6 +6,12 @@ import { Capacitor } from "@capacitor/core";
  */
 export function isTauri(): boolean {
   try {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI_INTERNALS__" in window || "__TAURI__" in window)
+    ) {
+      return true;
+    }
     return checkTauri();
   } catch {
     return false;
@@ -17,6 +23,13 @@ export function isTauri(): boolean {
  */
 export function isCapacitor(): boolean {
   try {
+    if (
+      typeof window !== "undefined" &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).Capacitor?.isNativePlatform?.()
+    ) {
+      return true;
+    }
     return Capacitor.isNativePlatform();
   } catch {
     return false;
@@ -28,10 +41,37 @@ export function isCapacitor(): boolean {
  */
 export function isAndroid(): boolean {
   try {
+    if (
+      typeof window !== "undefined" &&
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (window as any).Capacitor?.getPlatform?.() === "android"
+    ) {
+      return true;
+    }
     return Capacitor.getPlatform() === "android";
   } catch {
     return false;
   }
+}
+
+/**
+ * Returns true if running as an installed PWA in standalone display mode.
+ */
+export function isPwa(): boolean {
+  if (isTauri() || isCapacitor()) return false;
+  if (typeof window === "undefined") return false;
+  return (
+    Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches) ||
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Boolean((navigator as any).standalone)
+  );
+}
+
+/**
+ * Returns true if the app is already installed (Desktop, Mobile, or PWA).
+ */
+export function isInstalled(): boolean {
+  return isTauri() || isCapacitor() || isPwa();
 }
 
 /**
