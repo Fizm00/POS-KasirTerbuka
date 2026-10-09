@@ -65,14 +65,24 @@ export function formatReceiptDateTime(isoString: string): {
   full: string;
 } {
   const d = new Date(isoString);
-  const day = String(d.getDate()).padStart(2, "0");
-  const month = String(d.getMonth() + 1).padStart(2, "0");
-  const year = d.getFullYear();
-  const hours = String(d.getHours()).padStart(2, "0");
-  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const formatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jakarta",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+  const parts = formatter.formatToParts(d);
+  const day = parts.find((p) => p.type === "day")?.value ?? "01";
+  const month = parts.find((p) => p.type === "month")?.value ?? "01";
+  const year = parts.find((p) => p.type === "year")?.value ?? "2026";
+  const hour = parts.find((p) => p.type === "hour")?.value ?? "00";
+  const minute = parts.find((p) => p.type === "minute")?.value ?? "00";
 
   const date = `${day}/${month}/${year}`;
-  const time = `${hours}:${minutes}`;
+  const time = `${hour}:${minute}`;
   return { date, time, full: `${date} ${time}` };
 }
 
