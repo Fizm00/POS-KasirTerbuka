@@ -1,10 +1,10 @@
-﻿export function ThermalPrinterSection() {
+export function ThermalPrinterSection() {
   const supportData = [
-    { platform: "Windows", support: "Didukung" },
-    { platform: "macOS", support: "Terbatas" },
-    { platform: "Linux", support: "Didukung" },
-    { platform: "Android", support: "Didukung" },
-    { platform: "Browser", support: "Terbatas" },
+    { platform: "Windows", support: "Supported" },
+    { platform: "macOS", support: "Limited" },
+    { platform: "Linux", support: "Supported" },
+    { platform: "Android", support: "Supported" },
+    { platform: "Browser", support: "Limited" },
   ];
 
   return (
@@ -14,12 +14,12 @@
           {/* Left Column: Headline & Paragraph */}
           <div className="lg:col-span-6 space-y-6">
             <h2 className="font-serif-display font-normal text-3xl sm:text-4xl lg:text-[44px] text-[#1A1A18] leading-[1.12]">
-              Cetak struk di printer thermal.
+              Print receipts on thermal printers.
             </h2>
             <p className="text-[#5F5E58] text-base sm:text-lg leading-relaxed max-w-[500px]">
-              Mendukung printer struk kasir ukuran 58 mm dan 80 mm standar ESC/POS melalui koneksi
-              USB dan Bluetooth, tergantung platform yang digunakan. Pencetakan melalui peramban web
-              (browser print) tersedia sebagai pilihan cadangan.
+              Supports standard ESC/POS 58 mm and 80 mm thermal receipt printers over USB and
+              Bluetooth, depending on your platform. Browser print dialog is available as a reliable
+              fallback.
             </p>
           </div>
 
@@ -30,7 +30,7 @@
                 <thead>
                   <tr className="border-b border-[#E6E3DA] text-sm text-[#5F5E58]">
                     <th className="py-3 pr-4 font-normal">Platform</th>
-                    <th className="py-3 pl-4 font-normal text-right sm:text-left">Dukungan</th>
+                    <th className="py-3 pl-4 font-normal text-right sm:text-left">Support</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E6E3DA] text-sm">
@@ -47,7 +47,7 @@
 
               {/* Single line below the table */}
               <p className="mt-6 text-sm text-[#5F5E58]">
-                Daftar printer yang sudah diuji akan ditambahkan.
+                List of verified printer models will be added as tested.
               </p>
             </div>
           </div>

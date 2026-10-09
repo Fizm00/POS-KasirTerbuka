@@ -1,4 +1,4 @@
-﻿export function LocalFirstSection() {
+export function LocalFirstSection() {
   return (
     <section className="bg-[#FBFAF7] text-[#1A1A18] py-24 md:py-32 border-t border-[#E6E3DA]">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
@@ -6,12 +6,12 @@
           {/* Left: Headline & Paragraph */}
           <div className="lg:col-span-6 space-y-6">
             <h2 className="font-serif-display font-normal text-3xl sm:text-4xl lg:text-[44px] text-[#1A1A18] leading-[1.12]">
-              Data Anda tinggal di perangkat Anda.
+              Your data stays on your device.
             </h2>
             <p className="text-[#5F5E58] text-base sm:text-lg leading-relaxed max-w-[500px]">
-              Aplikasi ini tidak mengirim data penjualan ke server mana pun. Tidak ada internet pun,
-              kasir tetap jalan. Karena data hanya ada di satu perangkat, buat cadangan secara
-              berkala.
+              The app never sends your sales records to any remote server. Even without internet, your
+              cash register keeps working. Because data lives only on your device, back up
+              regularly.
             </p>
           </div>
 
@@ -27,7 +27,7 @@
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                   className="stroke-[#0E2B25]"
-                  aria-label="Diagram perangkat dengan basis data lokal di dalamnya"
+                  aria-label="Diagram of store device with local database inside connecting to a backup file"
                   role="img"
                 >
                   {/* Device frame */}
@@ -75,7 +75,7 @@
                     />
                   </g>
                 </svg>
-                <span className="text-xs font-medium text-[#1A1A18] mt-3">Perangkat Toko</span>
+                <span className="text-xs font-medium text-[#1A1A18] mt-3">Store Device</span>
               </div>
 
               {/* Dashed line pointing to backup file */}
@@ -125,12 +125,12 @@
                   </div>
                   <div className="text-center pb-2">
                     <div className="text-[11px] font-semibold text-[#1A1A18] leading-tight">
-                      Cadangan
+                      Backup
                     </div>
                     <div className="text-[10px] text-[#5F5E58] mt-0.5">(file)</div>
                   </div>
                 </div>
-                <span className="text-xs text-[#5F5E58] mt-3">File JSON Mandiri</span>
+                <span className="text-xs text-[#5F5E58] mt-3">Standalone JSON File</span>
               </div>
             </div>
           </div>

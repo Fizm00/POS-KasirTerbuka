@@ -8,11 +8,11 @@ export function Hero() {
           {/* Headline & Subhead (Row 1 on Desktop, Top on Mobile) */}
           <div className="lg:col-span-7 lg:row-start-1 pt-2 text-left">
             <h1 className="font-serif-display font-light text-[38px] sm:text-[44px] lg:text-[72px] leading-[1.06] tracking-[-0.02em] text-[#F1EFE8]">
-              Kasir gratis untuk toko kecil, yang tetap jalan tanpa internet.
+              Free point-of-sale for small shops, that keeps running without internet.
             </h1>
 
             <p className="mt-5 text-[#A9B7B1] text-base sm:text-lg lg:text-xl font-normal leading-relaxed max-w-[560px]">
-              Pasang di PC, tablet, atau HP. Datanya tetap di perangkat Anda.
+              Install on PC, tablet, or phone. Your data stays entirely on your device.
             </p>
           </div>
 
@@ -27,10 +27,10 @@ export function Hero() {
           <div className="lg:col-span-7 lg:row-start-2 text-left">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6">
               <a
-                href="#unduh"
+                href="#download"
                 className="w-full sm:w-auto h-14 sm:h-[52px] px-8 rounded-lg bg-[#F1EFE8] text-[#0E2B25] font-semibold text-base inline-flex items-center justify-center hover:bg-white transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#B08A57] focus:ring-offset-2 focus:ring-offset-[#0E2B25] min-h-[48px]"
               >
-                Unduh aplikasi
+                Download App
               </a>
               <a
                 href="https://github.com/Fizm00/POS-KasirTerbuka.git"
@@ -38,12 +38,12 @@ export function Hero() {
                 rel="noopener noreferrer"
                 className="min-h-[48px] py-3 inline-flex items-center justify-start text-[#F1EFE8] font-medium text-base underline underline-offset-8 decoration-1 decoration-[#F1EFE8]/40 hover:decoration-[#F1EFE8] transition-colors focus:outline-none focus:ring-2 focus:ring-[#B08A57] focus:ring-offset-2 focus:ring-offset-[#0E2B25]"
               >
-                Lihat di GitHub
+                View on GitHub
               </a>
             </div>
 
             <p className="mt-6 lg:mt-8 text-sm text-[#A9B7B1] font-normal tracking-wide">
-              Gratis. Sumber terbuka. Tanpa akun.
+              Free forever. Open source. No account needed.
             </p>
           </div>
         </div>

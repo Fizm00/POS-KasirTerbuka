@@ -2,7 +2,7 @@ export function Receipt() {
   return (
     <div
       className="relative w-full max-w-[340px] mx-auto filter drop-shadow-[0_24px_48px_rgba(0,0,0,0.28)] select-none"
-      aria-label="Contoh struk transaksi dari aplikasi Kasir Terbuka"
+      aria-label="Sample thermal receipt from Kasir Terbuka"
       role="img"
     >
       {/* Paper Body */}
@@ -47,17 +47,17 @@ export function Receipt() {
           </div>
 
           <div className="pt-1.5 flex justify-between text-[#5F5E58]">
-            <span>Tunai</span>
+            <span>Cash</span>
             <span className="text-[#1A1A18] tabular-nums">60.000</span>
           </div>
           <div className="flex justify-between text-[#5F5E58]">
-            <span>Kembalian</span>
+            <span>Change</span>
             <span className="text-[#1A1A18] tabular-nums">7.000</span>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="text-center pt-3 sm:pt-4 pb-0.5 text-xs text-[#5F5E58]">Terima kasih</div>
+        <div className="text-center pt-3 sm:pt-4 pb-0.5 text-xs text-[#5F5E58]">Thank you</div>
       </div>
 
       {/* Serrated Tear Edge (SVG zigzag seamlessly aligned with white paper) */}

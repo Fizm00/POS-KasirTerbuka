@@ -1,30 +1,30 @@
-﻿export function StepsSection() {
+export function StepsSection() {
   const steps = [
     {
       number: "01",
-      title: "Unduh atau pasang",
-      desc: "Dapatkan aplikasi untuk perangkat komputer Anda atau pasang langsung dari browser web.",
+      title: "Download or install",
+      desc: "Get the app for your computer or install directly from your web browser.",
     },
     {
       number: "02",
-      title: "Buat toko dan PIN admin",
-      desc: "Atur nama toko Anda dan amankan akses dengan PIN administrator pertama Anda.",
+      title: "Set up store & admin PIN",
+      desc: "Configure your store name and secure access with your initial administrator PIN.",
     },
     {
       number: "03",
-      title: "Mulai jualan",
-      desc: "Mulai catat transaksi penjualan, pantau persediaan, dan cetak struk kasir pelanggan.",
+      title: "Start selling",
+      desc: "Start recording sales transactions, tracking inventory, and printing customer receipts.",
     },
   ];
 
   return (
     <section
-      id="cara-kerja"
+      id="how-it-works"
       className="bg-[#FBFAF7] text-[#1A1A18] py-24 md:py-32 border-t border-[#E6E3DA]"
     >
       <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
         <h2 className="font-serif-display font-normal text-3xl sm:text-4xl lg:text-[44px] text-[#1A1A18] leading-[1.12] mb-14">
-          Mulai dalam tiga langkah.
+          Get started in three steps.
         </h2>
 
         {/* Three columns separated by vertical hairlines */}

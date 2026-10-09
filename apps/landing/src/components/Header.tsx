@@ -17,22 +17,22 @@ export function Header() {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
           <a
-            href="#fitur"
+            href="#features"
             className="text-[#A9B7B1] hover:text-[#F1EFE8] text-sm font-medium transition-colors"
           >
-            Fitur
+            Features
           </a>
           <a
-            href="#cara-kerja"
+            href="#how-it-works"
             className="text-[#A9B7B1] hover:text-[#F1EFE8] text-sm font-medium transition-colors"
           >
-            Cara kerja
+            How it works
           </a>
           <a
-            href="#unduh"
+            href="#download"
             className="text-[#A9B7B1] hover:text-[#F1EFE8] text-sm font-medium transition-colors"
           >
-            Unduh
+            Download
           </a>
           <a
             href="#faq"
@@ -50,13 +50,13 @@ export function Header() {
           </a>
         </nav>
 
-        {/* Desktop Unduh Button */}
+        {/* Desktop Download Button */}
         <div className="hidden md:flex items-center">
           <a
-            href="#unduh"
+            href="#download"
             className="h-10 px-5 rounded-lg bg-[#F1EFE8] text-[#0E2B25] text-sm font-semibold inline-flex items-center justify-center hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-[#B08A57]"
           >
-            Unduh
+            Download
           </a>
         </div>
 
@@ -64,7 +64,7 @@ export function Header() {
         <button
           type="button"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-label={mobileMenuOpen ? "Tutup menu" : "Buka menu"}
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
           aria-expanded={mobileMenuOpen}
           className="md:hidden w-12 h-12 flex items-center justify-center text-[#F1EFE8] hover:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B08A57]"
         >
@@ -76,25 +76,25 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-[#0E2B25] border-b border-white/10 px-6 py-4 space-y-2">
           <a
-            href="#fitur"
+            href="#features"
             onClick={() => setMobileMenuOpen(false)}
             className="min-h-[48px] flex items-center text-[#F1EFE8] text-base font-medium hover:text-white transition-colors"
           >
-            Fitur
+            Features
           </a>
           <a
-            href="#cara-kerja"
+            href="#how-it-works"
             onClick={() => setMobileMenuOpen(false)}
             className="min-h-[48px] flex items-center text-[#F1EFE8] text-base font-medium hover:text-white transition-colors"
           >
-            Cara kerja
+            How it works
           </a>
           <a
-            href="#unduh"
+            href="#download"
             onClick={() => setMobileMenuOpen(false)}
             className="min-h-[48px] flex items-center text-[#F1EFE8] text-base font-medium hover:text-white transition-colors"
           >
-            Unduh
+            Download
           </a>
           <a
             href="#faq"
@@ -114,11 +114,11 @@ export function Header() {
           </a>
           <div className="pt-2">
             <a
-              href="#unduh"
+              href="#download"
               onClick={() => setMobileMenuOpen(false)}
               className="w-full h-12 rounded-lg bg-[#F1EFE8] text-[#0E2B25] text-sm font-semibold flex items-center justify-center hover:bg-white transition-colors"
             >
-              Unduh aplikasi
+              Download App
             </a>
           </div>
         </div>

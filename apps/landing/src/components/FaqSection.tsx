@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 interface FaqItem {
   q: string;
@@ -8,32 +8,32 @@ interface FaqItem {
 export function FaqSection() {
   const faqs: FaqItem[] = [
     {
-      q: "Apakah benar-benar gratis?",
-      a: "Ya, aplikasi ini gratis selamanya di bawah lisensi AGPL-3.0. Tidak ada biaya langganan bulanan, tidak ada komisi per transaksi, dan tidak ada fitur berbayar yang dikunci.",
+      q: "Is it really free?",
+      a: "Yes, this app is free forever under the AGPL-3.0 license. There are no monthly subscriptions, no transaction fees, and no locked premium features.",
     },
     {
-      q: "Di mana data saya disimpan?",
-      a: "Seluruh data toko, daftar produk, dan riwayat transaksi disimpan langsung di penyimpanan lokal perangkat Anda sendiri (melalui IndexedDB browser/sistem). Data tidak pernah dikirim ke server luar mana pun.",
+      q: "Where is my data stored?",
+      a: "All store data, product lists, and transaction history are stored directly in your device's local storage (via IndexedDB). Data is never sent to any external server.",
     },
     {
-      q: "Bagaimana kalau perangkat rusak atau hilang?",
-      a: "Karena data hanya ada di perangkat Anda dan tidak disimpan di server online, Anda perlu membuat cadangan data secara berkala ke file JSON. File tersebut dapat disimpan di flashdisk atau drive pribadi untuk dipulihkan jika perangkat bermasalah.",
+      q: "What if my device breaks or gets lost?",
+      a: "Because data exists only on your device and is not saved to an online server, you should make regular backups to a JSON file. This file can be stored on a USB drive or personal cloud storage to restore if your device ever has an issue.",
     },
     {
-      q: "Apakah bisa dipakai di beberapa tablet sekaligus?",
-      a: "Saat ini belum bisa. Aplikasi dirancang mandiri untuk satu perangkat kasir per toko. Data transaksi tidak disinkronkan secara nirkabel antar-perangkat secara otomatis.",
+      q: "Can it be used on multiple devices simultaneously?",
+      a: "Not at this time. The app is designed as a standalone system for one cashier device per store. Transaction records do not synchronize wirelessly across multiple devices automatically.",
     },
     {
-      q: "Printer apa yang didukung?",
-      a: "Mendukung printer thermal standar ESC/POS ukuran 58 mm dan 80 mm melalui koneksi USB atau Bluetooth. Anda juga dapat menggunakan dialog cetak bawaan browser (browser print).",
+      q: "Which printers are supported?",
+      a: "Standard ESC/POS 58 mm and 80 mm thermal receipt printers via USB or Bluetooth. You can also use your browser's built-in print dialog (browser print).",
     },
     {
-      q: "Apakah perlu internet?",
-      a: "Tidak perlu. Seluruh fitur pencatatan kasir, kalkulasi stok, dan cetak struk bekerja 100% tanpa koneksi internet.",
+      q: "Do I need an internet connection?",
+      a: "No. All core cashier functions, inventory calculations, and receipt printing work 100% without an internet connection.",
     },
     {
-      q: "Bagaimana cara mencadangkan data?",
-      a: "Masuk ke menu Pengaturan > Cadangkan Data, lalu klik Ekspor Cadangan. File JSON akan terunduh ke perangkat Anda dan siap disimpan sebagai arsip aman.",
+      q: "How do I back up my data?",
+      a: "Go to Settings > Backup Data, then click Export Backup. A JSON file will download to your device, ready to be kept as a safe archive.",
     },
   ];
 
@@ -51,7 +51,7 @@ export function FaqSection() {
     >
       <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
         <h2 className="font-serif-display font-normal text-3xl sm:text-4xl lg:text-[44px] text-[#1A1A18] leading-[1.12] mb-12">
-          Pertanyaan yang sering diajukan
+          Frequently asked questions
         </h2>
 
         {/* Accordion with hairline separators */}

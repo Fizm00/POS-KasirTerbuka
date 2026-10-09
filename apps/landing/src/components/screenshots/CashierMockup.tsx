@@ -1,13 +1,13 @@
-﻿export function CashierMockup() {
+export function CashierMockup() {
   return (
     <div className="border border-[#E6E3DA] rounded-[2px] bg-white p-4 font-sans text-xs select-none">
       {/* Top search bar & status */}
       <div className="flex items-center justify-between pb-3 border-b border-[#E6E3DA] gap-2">
         <div className="h-7 px-3 bg-[#FBFAF7] border border-[#E6E3DA] rounded text-[#5F5E58] flex items-center flex-1">
-          Cari produk atau scan barcode... (F2)
+          Search product or scan barcode... (F2)
         </div>
         <div className="h-7 px-2.5 bg-[#FBFAF7] border border-[#E6E3DA] rounded text-[#1F6F5C] font-medium flex items-center">
-          Kasir: Ani
+          Cashier: Ani
         </div>
       </div>
 
@@ -16,22 +16,22 @@
         <div className="col-span-7 grid grid-cols-2 gap-2">
           <div className="p-2.5 border border-[#E6E3DA] rounded-[2px] bg-[#FBFAF7]">
             <div className="font-semibold text-[#1A1A18]">Kopi Susu Aren</div>
-            <div className="text-[11px] text-[#5F5E58] mt-0.5">Minuman</div>
+            <div className="text-[11px] text-[#5F5E58] mt-0.5">Beverage</div>
             <div className="font-medium text-[#1F6F5C] mt-2">Rp 15.000</div>
           </div>
           <div className="p-2.5 border border-[#E6E3DA] rounded-[2px] bg-[#FBFAF7]">
             <div className="font-semibold text-[#1A1A18]">Nasi Goreng</div>
-            <div className="text-[11px] text-[#5F5E58] mt-0.5">Makanan</div>
+            <div className="text-[11px] text-[#5F5E58] mt-0.5">Food</div>
             <div className="font-medium text-[#1F6F5C] mt-2">Rp 22.000</div>
           </div>
           <div className="p-2.5 border border-[#E6E3DA] rounded-[2px] bg-[#FBFAF7]">
             <div className="font-semibold text-[#1A1A18]">Teh Botol Sosro</div>
-            <div className="text-[11px] text-[#5F5E58] mt-0.5">Minuman</div>
+            <div className="text-[11px] text-[#5F5E58] mt-0.5">Beverage</div>
             <div className="font-medium text-[#1F6F5C] mt-2">Rp 6.000</div>
           </div>
           <div className="p-2.5 border border-[#E6E3DA] rounded-[2px] bg-[#FBFAF7]">
             <div className="font-semibold text-[#1A1A18]">Roti Bakar</div>
-            <div className="text-[11px] text-[#5F5E58] mt-0.5">Makanan</div>
+            <div className="text-[11px] text-[#5F5E58] mt-0.5">Food</div>
             <div className="font-medium text-[#1F6F5C] mt-2">Rp 18.000</div>
           </div>
         </div>
@@ -40,7 +40,7 @@
         <div className="col-span-5 border-l border-[#E6E3DA] pl-3 flex flex-col justify-between">
           <div>
             <div className="font-semibold text-[#1A1A18] pb-1.5 border-b border-[#E6E3DA]">
-              Keranjang (3)
+              Cart (3)
             </div>
             <div className="space-y-1.5 pt-2 text-[11px]">
               <div className="flex justify-between">
@@ -64,7 +64,7 @@
               <span className="font-bold text-sm text-[#1A1A18]">Rp 58.000</span>
             </div>
             <div className="h-8 bg-[#1F6F5C] text-white font-medium rounded flex items-center justify-center text-[11px]">
-              Bayar (F9)
+              Pay (F9)
             </div>
           </div>
         </div>

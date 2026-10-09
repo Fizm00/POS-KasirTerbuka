@@ -7,8 +7,8 @@ describe("Landing Page — Full Desktop Experience", () => {
     render(<App />);
 
     expect(screen.getByRole("link", { name: /^Kasir Terbuka$/i })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Fitur" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Cara kerja" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Features" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "How it works" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "FAQ" })).toBeInTheDocument();
     expect(screen.getAllByRole("link", { name: "GitHub" }).length).toBeGreaterThanOrEqual(1);
   });
@@ -18,17 +18,15 @@ describe("Landing Page — Full Desktop Experience", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "Kasir gratis untuk toko kecil, yang tetap jalan tanpa internet.",
+        name: "Free point-of-sale for small shops, that keeps running without internet.",
       })
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Pasang di PC, tablet, atau HP. Datanya tetap di perangkat Anda.")
+      screen.getByText("Install on PC, tablet, or phone. Your data stays entirely on your device.")
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Unduh aplikasi" }).length).toBeGreaterThanOrEqual(
-      1
-    );
-    expect(screen.getByRole("link", { name: "Lihat di GitHub" })).toBeInTheDocument();
-    expect(screen.getByText("Gratis. Sumber terbuka. Tanpa akun.")).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Download App" }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole("link", { name: "View on GitHub" })).toBeInTheDocument();
+    expect(screen.getByText("Free forever. Open source. No account needed.")).toBeInTheDocument();
   });
 
   it("renders the thermal receipt strip with real sale details", () => {
@@ -38,71 +36,71 @@ describe("Landing Page — Full Desktop Experience", () => {
     expect(screen.getByText("INV-20261009-0012")).toBeInTheDocument();
     expect(screen.getByText("TOTAL")).toBeInTheDocument();
     expect(screen.getByText("53.000")).toBeInTheDocument();
-    expect(screen.getByText("Terima kasih")).toBeInTheDocument();
+    expect(screen.getByText("Thank you")).toBeInTheDocument();
   });
 
   it("renders Statement section sentence", () => {
     render(<App />);
 
     expect(
-      screen.getByText("Toko kecil tidak butuh langganan bulanan untuk mencatat penjualan.")
+      screen.getByText("Small shops do not need a monthly subscription just to record sales.")
     ).toBeInTheDocument();
   });
 
   it("renders Features section with 4 alternating rows and mockups", () => {
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: "Kasir yang cepat" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Stok dan produk" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Laporan sederhana" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Beberapa peran" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Fast at the counter" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Products & inventory" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Clear, honest reports" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Roles & PIN lock" })).toBeInTheDocument();
   });
 
   it("renders Local-First explainer and Thermal Printer sections", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Data Anda tinggal di perangkat Anda." })
+      screen.getByRole("heading", { name: "Your data stays on your device." })
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "Cetak struk di printer thermal." })
+      screen.getByRole("heading", { name: "Print receipts on thermal printers." })
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Daftar printer yang sudah diuji akan ditambahkan.")
+      screen.getByText("List of verified printer models will be added as tested.")
     ).toBeInTheDocument();
   });
 
   it("renders Steps section and Download section panel", () => {
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: "Mulai dalam tiga langkah." })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Unduh Kasir Terbuka" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Unduh untuk Windows" })).toBeInTheDocument();
-    expect(screen.getByText("Segera hadir")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Get started in three steps." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Download Kasir Terbuka" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Download for Windows" })).toBeInTheDocument();
+    expect(screen.getByText("Coming soon")).toBeInTheDocument();
   });
 
   it("renders Open Source section with 3 plain links and repo link", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Dibuat terbuka, supaya bisa diperiksa." })
+      screen.getByRole("heading", { name: "Built in the open, so it can be verified." })
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Laporkan masalah" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Berkontribusi" })).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "Dokumentasi" }).length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByRole("link", { name: "Repositori GitHub" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Report an issue" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Contribute" })).toBeInTheDocument();
+    expect(screen.getAllByRole("link", { name: "Documentation" }).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByRole("link", { name: "GitHub repository" })).toBeInTheDocument();
   });
 
   it("renders FAQ accordion with 7 questions, first question expanded by default, and toggles on click", () => {
     render(<App />);
 
-    const q1 = "Apakah benar-benar gratis?";
-    const q2 = "Di mana data saya disimpan?";
-    const q3 = "Bagaimana kalau perangkat rusak atau hilang?";
-    const q4 = "Apakah bisa dipakai di beberapa tablet sekaligus?";
-    const q5 = "Printer apa yang didukung?";
-    const q6 = "Apakah perlu internet?";
-    const q7 = "Bagaimana cara mencadangkan data?";
+    const q1 = "Is it really free?";
+    const q2 = "Where is my data stored?";
+    const q3 = "What if my device breaks or gets lost?";
+    const q4 = "Can it be used on multiple devices simultaneously?";
+    const q5 = "Which printers are supported?";
+    const q6 = "Do I need an internet connection?";
+    const q7 = "How do I back up my data?";
 
     expect(screen.getByText(q1)).toBeInTheDocument();
     expect(screen.getByText(q2)).toBeInTheDocument();
@@ -114,20 +112,20 @@ describe("Landing Page — Full Desktop Experience", () => {
 
     // First question is expanded by default
     expect(
-      screen.getByText(/Ya, aplikasi ini gratis selamanya di bawah lisensi AGPL-3.0/i)
+      screen.getByText(/Yes, this app is free forever under the AGPL-3.0 license/i)
     ).toBeInTheDocument();
 
     // Click second question to expand it
     fireEvent.click(screen.getByText(q2));
     expect(
-      screen.getByText(/Seluruh data toko, daftar produk, dan riwayat transaksi disimpan langsung/i)
+      screen.getByText(/All store data, product lists, and transaction history are stored directly/i)
     ).toBeInTheDocument();
 
     // Click fourth question to confirm honesty about non-sync limitation
     fireEvent.click(screen.getByText(q4));
     expect(
       screen.getByText(
-        /Data transaksi tidak disinkronkan secara nirkabel antar-perangkat secara otomatis/i
+        /Transaction records do not synchronize wirelessly across multiple devices automatically/i
       )
     ).toBeInTheDocument();
   });
@@ -136,9 +134,9 @@ describe("Landing Page — Full Desktop Experience", () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: "Mulai catat penjualan hari ini." })
+      screen.getByRole("heading", { name: "Start recording sales today." })
     ).toBeInTheDocument();
-    expect(screen.getByText("Proyek sumber terbuka.")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Lisensi" })).toBeInTheDocument();
+    expect(screen.getByText("Open-source project.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "License" })).toBeInTheDocument();
   });
 });

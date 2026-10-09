@@ -14,8 +14,8 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
   if (initialPlatform === "android") {
     return {
       platform: "android",
-      label: "Unduh untuk Android",
-      versionText: "Versi 1.0.0 (APK)",
+      label: "Download for Android",
+      versionText: "Version 1.0.0 (APK)",
       href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
     };
   }
@@ -24,16 +24,16 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
     if (ua.includes("android")) {
       return {
         platform: "android",
-        label: "Unduh untuk Android",
-        versionText: "Versi 1.0.0 (APK)",
+        label: "Download for Android",
+        versionText: "Version 1.0.0 (APK)",
         href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
       };
     }
     if (ua.includes("mac")) {
       return {
         platform: "macos",
-        label: "Unduh untuk macOS",
-        versionText: "Versi 1.0.0, 78 MB",
+        label: "Download for macOS",
+        versionText: "Version 1.0.0, 78 MB",
         href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
         filename: "Kasir-Terbuka-1.0.0.dmg",
       };
@@ -41,8 +41,8 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
     if (ua.includes("linux")) {
       return {
         platform: "linux",
-        label: "Unduh untuk Linux",
-        versionText: "Versi 1.0.0, 82 MB",
+        label: "Download for Linux",
+        versionText: "Version 1.0.0, 82 MB",
         href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
         filename: "Kasir-Terbuka-1.0.0.AppImage",
       };
@@ -50,8 +50,8 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
   }
   return {
     platform: "windows",
-    label: "Unduh untuk Windows",
-    versionText: "Versi 1.0.0, 2.4 MB",
+    label: "Download for Windows",
+    versionText: "Version 1.0.0, 2.4 MB",
     href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
     filename: "Kasir-Terbuka-Setup-1.0.0.exe",
   };
@@ -64,51 +64,51 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
     {
       name: "Windows (.exe)",
       type: "link",
-      actionText: "Unduh",
+      actionText: "Download",
       href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
       filename: "Kasir-Terbuka-Setup-1.0.0.exe",
     },
     {
       name: "macOS (.dmg)",
       type: "link",
-      actionText: "Unduh",
+      actionText: "Download",
       href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
       filename: "Kasir-Terbuka-1.0.0.dmg",
     },
     {
       name: "Linux (.AppImage)",
       type: "link",
-      actionText: "Unduh",
+      actionText: "Download",
       href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
       filename: "Kasir-Terbuka-1.0.0.AppImage",
     },
     {
       name: "Android (.apk)",
       type: "link",
-      actionText: "Unduh",
+      actionText: "Download",
       href: "https://github.com/Fizm00/POS-KasirTerbuka/releases/latest",
     },
     {
       name: "iOS (.ipa)",
       type: "text",
-      actionText: "Segera hadir",
+      actionText: "Coming soon",
     },
     {
-      name: "Pasang dari browser (PWA)",
+      name: "Install from browser (PWA)",
       type: "button",
-      actionText: "Buka aplikasi",
+      actionText: "Open app",
       href: "/",
     },
   ];
 
   return (
     <section
-      id="unduh"
+      id="download"
       className="bg-[#FBFAF7] text-[#1A1A18] py-16 sm:py-24 md:py-32 border-t border-[#E6E3DA]"
     >
       <div className="max-w-[1200px] mx-auto px-6 lg:px-8">
         <h2 className="font-serif-display font-normal text-3xl sm:text-4xl lg:text-[44px] text-[#1A1A18] leading-[1.12] mb-8 sm:mb-10 text-left">
-          Unduh Kasir Terbuka
+          Download Kasir Terbuka
         </h2>
 
         {/* Single wide panel with 1px border and 2px radius */}
@@ -164,14 +164,15 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
 
           {/* Under the list, one small install note */}
           <p className="mt-8 pt-4 border-t border-[#E6E3DA]/60 text-xs sm:text-sm text-[#5F5E58] leading-relaxed text-left">
-            Pemasang belum ditandatangani, jadi sistem mungkin menampilkan peringatan.{" "}
+            The installer is currently self-signed, so your operating system may show an initial
+            warning.{" "}
             <a
               href="https://github.com/Fizm00/POS-KasirTerbuka#panduan-pemasangan"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[#1F6F5C] hover:underline font-medium"
             >
-              Lihat panduan pemasangan
+              View installation guide
             </a>
             .
           </p>
