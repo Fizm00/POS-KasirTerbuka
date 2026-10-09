@@ -6,11 +6,19 @@ import { Capacitor } from "@capacitor/core";
  */
 export function isTauri(): boolean {
   try {
-    if (
-      typeof window !== "undefined" &&
-      ("__TAURI_INTERNALS__" in window || "__TAURI__" in window)
-    ) {
-      return true;
+    if (typeof window !== "undefined") {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const win = window as any;
+      if (
+        win.location?.hostname === "tauri.localhost" ||
+        win.location?.origin?.includes("tauri.localhost") ||
+        win.location?.protocol === "tauri:" ||
+        Boolean(win.__TAURI_INTERNALS__) ||
+        Boolean(win.__TAURI__) ||
+        Boolean(win.isTauri)
+      ) {
+        return true;
+      }
     }
     return checkTauri();
   } catch {
@@ -23,12 +31,18 @@ export function isTauri(): boolean {
  */
 export function isCapacitor(): boolean {
   try {
-    if (
-      typeof window !== "undefined" &&
+    if (typeof window !== "undefined") {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).Capacitor?.isNativePlatform?.()
-    ) {
-      return true;
+      const win = window as any;
+      if (
+        Boolean(win.Capacitor?.isNativePlatform?.()) ||
+        Boolean(win.androidBridge) ||
+        win.location?.protocol === "capacitor:" ||
+        (win.location?.origin === "http://localhost" && /android/i.test(navigator?.userAgent || "")) ||
+        (win.location?.origin === "https://localhost" && /android/i.test(navigator?.userAgent || ""))
+      ) {
+        return true;
+      }
     }
     return Capacitor.isNativePlatform();
   } catch {
@@ -41,14 +55,19 @@ export function isCapacitor(): boolean {
  */
 export function isAndroid(): boolean {
   try {
-    if (
-      typeof window !== "undefined" &&
+    if (typeof window !== "undefined") {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (window as any).Capacitor?.getPlatform?.() === "android"
-    ) {
-      return true;
+      const win = window as any;
+      if (
+        Boolean(win.androidBridge) ||
+        win.Capacitor?.getPlatform?.() === "android" ||
+        win.Capacitor?.platform === "android" ||
+        (isCapacitor() && /android/i.test(navigator?.userAgent || ""))
+      ) {
+        return true;
+      }
     }
-    return Capacitor.getPlatform() === "android";
+    return isCapacitor() && Capacitor.getPlatform() === "android";
   } catch {
     return false;
   }

@@ -29,22 +29,48 @@ export const SettingsPage: React.FC = () => {
 
   const [settings, setSettings] = useState<StoreSettings | null>(null);
 
-  // PWA install state
-  const [isStandalone, setIsStandalone] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches)
-  );
+  // PWA & Platform install state
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [platformType, setPlatformType] = useState<"desktop" | "mobile" | "pwa" | "browser">(() => {
+    if (isTauri()) return "desktop";
+    if (isCapacitor() || isAndroid()) return "mobile";
+    if (isPwa() || (typeof window !== "undefined" && Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))) return "pwa";
+    return "browser";
+  });
 
-  const isDesktop = isTauri();
-  const isMobile = isCapacitor() || isAndroid();
-  const isInstalledApp = isDesktop || isMobile || isPwa() || isStandalone;
+  useEffect(() => {
+    const updatePlatform = () => {
+      if (isTauri()) {
+        setPlatformType("desktop");
+      } else if (isCapacitor() || isAndroid()) {
+        setPlatformType("mobile");
+      } else if (isPwa() || (typeof window !== "undefined" && Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))) {
+        setPlatformType("pwa");
+      } else {
+        setPlatformType("browser");
+      }
+    };
+
+    updatePlatform();
+    const t1 = setTimeout(updatePlatform, 100);
+    const t2 = setTimeout(updatePlatform, 500);
+    const t3 = setTimeout(updatePlatform, 1200);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, []);
+
+  const isDesktop = platformType === "desktop";
+  const isMobile = platformType === "mobile";
+  const isPwaApp = platformType === "pwa";
+  const isInstalledApp = isDesktop || isMobile || isPwaApp;
 
   const getAppStatus = () => {
     if (isDesktop) return t("settings.app.statusDesktop");
     if (isMobile) return t("settings.app.statusMobile");
-    if (isPwa() || isStandalone) return t("settings.app.statusStandalone");
+    if (isPwaApp) return t("settings.app.statusStandalone");
     return t("settings.app.statusBrowser");
   };
 
@@ -85,7 +111,7 @@ export const SettingsPage: React.FC = () => {
     };
 
     const handleAppInstalled = () => {
-      setIsStandalone(true);
+      setPlatformType("pwa");
       setDeferredPrompt(null);
     };
 
@@ -102,7 +128,7 @@ export const SettingsPage: React.FC = () => {
       await deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
       if (choice.outcome === "accepted") {
-        setIsStandalone(true);
+        setPlatformType("pwa");
         showToast(t("settings.app.installedSuccess"));
       }
       setDeferredPrompt(null);
