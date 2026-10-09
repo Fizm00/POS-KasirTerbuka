@@ -83,9 +83,17 @@ describe("Landing Page — Full Desktop Experience", () => {
   });
 
   it("renders DownloadSection with platform overrides", () => {
-    const { unmount } = render(<DownloadSection initialPlatform="windows" />);
+    const { unmount: unmountWin } = render(<DownloadSection initialPlatform="windows" />);
     expect(screen.getByRole("link", { name: "Download for Windows" })).toBeInTheDocument();
-    unmount();
+    unmountWin();
+
+    const { unmount: unmountMac } = render(<DownloadSection initialPlatform="macos" />);
+    expect(screen.getByRole("link", { name: "Download for macOS" })).toBeInTheDocument();
+    unmountMac();
+
+    const { unmount: unmountLinux } = render(<DownloadSection initialPlatform="linux" />);
+    expect(screen.getByRole("link", { name: "Download for Linux" })).toBeInTheDocument();
+    unmountLinux();
 
     render(<DownloadSection initialPlatform="android" />);
     expect(screen.getByRole("link", { name: "Download for Android" })).toBeInTheDocument();

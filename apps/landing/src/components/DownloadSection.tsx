@@ -11,6 +11,33 @@ interface DownloadSectionProps {
 }
 
 function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" | "linux") {
+  if (initialPlatform === "windows") {
+    return {
+      platform: "windows",
+      label: "Download for Windows",
+      versionText: "Version 1.0.0, 2.4 MB",
+      href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
+      filename: "Kasir-Terbuka-Setup-1.0.0.exe",
+    };
+  }
+  if (initialPlatform === "macos") {
+    return {
+      platform: "macos",
+      label: "Download for macOS",
+      versionText: "Version 1.0.0, 78 MB",
+      href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
+      filename: "Kasir-Terbuka-1.0.0.dmg",
+    };
+  }
+  if (initialPlatform === "linux") {
+    return {
+      platform: "linux",
+      label: "Download for Linux",
+      versionText: "Version 1.0.0, 82 MB",
+      href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
+      filename: "Kasir-Terbuka-1.0.0.AppImage",
+    };
+  }
   if (initialPlatform === "android") {
     return {
       platform: "android",
