@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import App from "./App";
+import { DownloadSection } from "./components/DownloadSection";
 
 describe("Landing Page — Full Desktop Experience", () => {
   it("renders header with wordmark, nav links, and action button", () => {
@@ -75,8 +76,19 @@ describe("Landing Page — Full Desktop Experience", () => {
 
     expect(screen.getByRole("heading", { name: "Get started in three steps." })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Download Kasir Terbuka" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Download for Windows" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /^Download for (Windows|Linux|macOS|Android)$/ })
+    ).toBeInTheDocument();
     expect(screen.getByText("Coming soon")).toBeInTheDocument();
+  });
+
+  it("renders DownloadSection with platform overrides", () => {
+    const { unmount } = render(<DownloadSection initialPlatform="windows" />);
+    expect(screen.getByRole("link", { name: "Download for Windows" })).toBeInTheDocument();
+    unmount();
+
+    render(<DownloadSection initialPlatform="android" />);
+    expect(screen.getByRole("link", { name: "Download for Android" })).toBeInTheDocument();
   });
 
   it("renders Open Source section with 3 plain links and repo link", () => {
