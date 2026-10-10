@@ -39,8 +39,10 @@ export function isCapacitor(): boolean {
         Boolean(win.Capacitor?.isNativePlatform?.()) ||
         Boolean(win.androidBridge) ||
         win.location?.protocol === "capacitor:" ||
-        (win.location?.origin === "http://localhost" && /android/i.test(navigator?.userAgent || "")) ||
-        (win.location?.origin === "https://localhost" && /android/i.test(navigator?.userAgent || ""))
+        (win.location?.origin === "http://localhost" &&
+          /android/i.test(navigator?.userAgent || "")) ||
+        (win.location?.origin === "https://localhost" &&
+          /android/i.test(navigator?.userAgent || ""))
       ) {
         return true;
       }

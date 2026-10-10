@@ -155,4 +155,67 @@ describe("Route guards", () => {
       expect(screen.getAllByRole("button", { name: /Tambah produk/i }).length).toBeGreaterThan(0);
     });
   });
+
+  it("redirects to /kasir when attempting to access a route for a disabled feature", async () => {
+    await db.users.add({
+      id: "admin-1",
+      name: "Admin Budi",
+      role: "admin",
+      pinHash: "sample-hash",
+      isActive: true,
+    });
+
+    // Initialize settings with stockIn feature disabled
+    await db.settings.put({
+      id: "default",
+      storeName: "Toko Makmur",
+      address: "",
+      phone: "",
+      receiptFooter: "",
+      paperWidth: 58,
+      currency: "IDR",
+      features: {
+        stockIn: false,
+        shifts: false,
+        expenses: false,
+        tables: false,
+        receivables: false,
+        photos: false,
+        csvImport: false,
+        holdOrders: false,
+        variants: false,
+        tax: false,
+        serviceCharge: false,
+      },
+    });
+
+    useAuthStore.getState().unlock({
+      id: "admin-1",
+      name: "Admin Budi",
+      role: "admin",
+      pinHash: "sample-hash",
+      isActive: true,
+    });
+
+    render(
+      <MemoryRouter initialEntries={["/stok-masuk"]}>
+        <Routes>
+          <Route path="/kasir" element={<div>Layar Kasir Utama</div>} />
+          <Route
+            path="/stok-masuk"
+            element={
+              <ProtectedRoute>
+                <div>Modul Stok Masuk</div>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Layar Kasir Utama")).toBeInTheDocument();
+      expect(screen.queryByText("Modul Stok Masuk")).not.toBeInTheDocument();
+    });
+  });
 });

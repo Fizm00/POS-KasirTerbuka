@@ -21,11 +21,21 @@
     "users": "Pengguna",
     "settings": "Pengaturan",
     "lock": "Kunci",
-    "cashierLabel": "Kasir: {{name}}"
+    "cashierLabel": "Kasir: {{name}}",
+    "more": "Lainnya",
+    "moreMenu": "Menu lainnya"
   },
   "setup": {
     "title": "Setup awal",
     "step": "Langkah {{current}} dari {{total}}",
+    "presetTitle": "Jenis usaha",
+    "presetSubtitle": "Pilih jenis usaha untuk menyesuaikan modul dan tampilan kasir. Pengaturan ini dapat disesuaikan kembali di Pengaturan.",
+    "presetRetailTitle": "Toko / Warung",
+    "presetRetailDesc": "Mode ringkas dengan kode barcode, pencatatan stok masuk, dan impor produk CSV.",
+    "presetCafeTitle": "Kafe / Warung makan",
+    "presetCafeDesc": "Mode foto menu dengan varian, shift kasir, nomor meja, dan antrean gantung.",
+    "presetCustomTitle": "Kustom",
+    "presetCustomDesc": "Mulai dari fitur paling mendasar. Modul tambahan dapat diaktifkan sendiri sesuai kebutuhan.",
     "storeTitle": "Data toko",
     "storeName": "Nama toko",
     "storeNamePlaceholder": "Contoh: Toko Berkah",
@@ -61,12 +71,103 @@
     "searchPlaceholder": "Cari produk atau scan barcode",
     "allCategories": "Semua kategori",
     "lowStockFilter": "Stok menipis",
+    "lowStockFilterCount": "Stok menipis ({{count}})",
     "addProduct": "Tambah produk",
+    "importCsv": "Impor CSV",
+    "bulkStockIn": "Barang masuk",
     "editProduct": "Ubah produk",
     "manageCategories": "Kelola kategori",
     "devSeed": "Muat data contoh (Dev)",
     "devSeedSuccess": "Data contoh produk berhasil dimuat.",
+    "importSuccessToast": "Impor berhasil: {{created}} produk ditambahkan, {{updated}} diperbarui.",
+    "stockDrawer": {
+      "title": "Kelola stok - {{name}}",
+      "currentStock": "Stok saat ini: {{count}}",
+      "tabStockIn": "Barang masuk",
+      "tabAdjust": "Penyesuaian",
+      "tabHistory": "Riwayat stok",
+      "stockInQty": "Jumlah masuk",
+      "stockInQtyPlaceholder": "Contoh: 10",
+      "stockInCost": "Harga modal baru (opsional)",
+      "stockInCostPlaceholder": "Biarkan kosong jika tidak berubah",
+      "stockInNote": "Catatan (opsional)",
+      "stockInNotePlaceholder": "Contoh: Dari supplier A",
+      "stockInSubmit": "Simpan stok masuk",
+      "adjustActualCount": "Stok fisik sebenarnya",
+      "adjustDifference": "Selisih: {{diff}}",
+      "adjustReason": "Alasan penyesuaian",
+      "adjustReasonPlaceholder": "Contoh: Barang rusak / kadaluarsa",
+      "adjustReasonRequired": "Alasan penyesuaian wajib diisi.",
+      "adjustSubmit": "Simpan penyesuaian",
+      "adminOnlyAdjustment": "Hanya admin yang dapat melakukan penyesuaian stok.",
+      "toastStockInSuccess": "Stok masuk berhasil disimpan.",
+      "toastAdjustSuccess": "Penyesuaian stok berhasil disimpan.",
+      "historyEmpty": "Belum ada riwayat stok.",
+      "historyTable": {
+        "date": "Waktu",
+        "type": "Jenis",
+        "change": "Perubahan",
+        "resultingStock": "Stok akhir",
+        "note": "Catatan",
+        "user": "Pengguna",
+        "typeIn": "Barang masuk",
+        "typeAdjust": "Penyesuaian",
+        "typeSale": "Penjualan",
+        "typeVoid": "Pembatalan"
+      }
+    },
+    "import": {
+      "title": "Impor produk dari CSV",
+      "downloadTemplate": "Unduh template CSV",
+      "templateHelper": "Gunakan template resmi untuk format kolom yang sesuai. Jika menggunakan Excel, simpan berkas sebagai CSV (.csv).",
+      "chooseFile": "Pilih berkas CSV",
+      "dropzonePlaceholder": "Pilih berkas CSV (maksimal 5 MB, 5.000 baris)",
+      "fileSelected": "Berkas: {{name}} ({{count}} baris)",
+      "changeFile": "Ganti berkas",
+      "conflictTitle": "Jika SKU produk sudah ada di database:",
+      "conflictSkip": "Lewati produk (pertahankan data lama)",
+      "conflictUpdate": "Perbarui produk (timpa harga, modal, dan stok)",
+      "mappingTitle": "Pemetaan kolom",
+      "mappingHelper": "Cocokkan kolom berkas CSV dengan data produk Kasir Terbuka.",
+      "previewTitle": "Pratinjau data (maks. 20 baris pertama)",
+      "validationErrorsTitle": "Ditemukan {{count}} masalah pada berkas CSV:",
+      "rowHeader": "Baris",
+      "fieldHeader": "Kolom",
+      "problemHeader": "Masalah",
+      "executeButton": "Mulai impor ({{count}} baris)",
+      "importing": "Mengimpor produk...",
+      "successTitle": "Impor produk berhasil",
+      "summaryTotal": "Total data diproses",
+      "summaryCreated": "Produk baru",
+      "summaryUpdated": "Produk diperbarui",
+      "summarySkipped": "Produk dilewati",
+      "close": "Tutup",
+      "fields": {
+        "name": "Nama produk",
+        "sku": "SKU",
+        "category": "Kategori",
+        "cost": "Harga modal",
+        "price": "Harga jual",
+        "stock": "Stok",
+        "lowStockThreshold": "Batas stok menipis",
+        "unmapped": "-- Jangan impor kolom ini --"
+      },
+      "errors": {
+        "emptyFile": "Berkas CSV kosong atau tidak memiliki baris data.",
+        "fileTooLarge": "Ukuran berkas melebihi batas maksimal 5 MB.",
+        "tooManyRows": "Jumlah baris melebihi batas maksimal 5.000 baris (terdapat {{count}} baris).",
+        "missingRequiredHeader": "Kolom \"{{header}}\" wajib dipetakan.",
+        "missingName": "Nama produk tidak boleh kosong.",
+        "missingSku": "SKU tidak boleh kosong.",
+        "duplicateSkuInCsv": "SKU kembar/duplikat dalam berkas CSV pada baris {{row}}.",
+        "invalidPrice": "Harga jual harus berupa angka valid $\\ge 0$.",
+        "invalidCost": "Harga modal harus berupa angka valid $\\ge 0$.",
+        "invalidStock": "Stok harus berupa angka valid $\\ge 0$.",
+        "invalidThreshold": "Batas stok menipis harus berupa angka valid $\\ge 0$."
+      }
+    },
     "table": {
+      "thumbnail": "Foto",
       "name": "Nama",
       "sku": "SKU",
       "category": "Kategori",
@@ -77,10 +178,18 @@
       "active": "Aktif",
       "inactive": "Nonaktif",
       "edit": "Ubah",
+      "stockAction": "Stok",
       "activate": "Aktifkan",
       "deactivate": "Nonaktifkan"
     },
     "form": {
+      "photoLabel": "Foto produk",
+      "photoHelper": "Format WebP, PNG, atau JPEG. Otomatis dikompresi ke maks. 480 px.",
+      "photoSelect": "Pilih foto",
+      "photoChange": "Ubah foto",
+      "photoRemove": "Hapus foto",
+      "photoErrorInvalid": "Format berkas tidak didukung. Gunakan WebP, PNG, atau JPEG.",
+      "photoErrorSize": "Ukuran gambar terlalu besar (maksimal 10 MB).",
       "nameLabel": "Nama produk",
       "namePlaceholder": "Contoh: Kopi Susu Gula Aren",
       "skuLabel": "SKU / barcode",
@@ -156,6 +265,9 @@
     "allCategories": "Semua",
     "stock": "Stok: {{count}}",
     "outOfStock": "Stok habis",
+    "viewModePhoto": "Mode foto",
+    "viewModeCompact": "Mode ringkas",
+    "toggleViewMode": "Ganti mode tampilan produk",
     "productNotFound": "Produk dengan SKU \"{{sku}}\" tidak ditemukan.",
     "emptyCatalog": "Belum ada produk yang aktif. Tambah produk di menu Produk.",
     "emptyFilter": "Tidak ada produk yang cocok dengan pencarian atau kategori ini."
@@ -240,7 +352,22 @@
     "empty": {
       "noTransactions": "Belum ada transaksi.",
       "noFilterResults": "Tidak ada transaksi yang cocok dengan filter."
-    }
+    },
+    "summaryLine": "{{count}} transaksi · Total {{total}}",
+    "resetFilter": "Reset filter"
+  },
+  "datePicker": {
+    "presetToday": "Hari ini",
+    "presetYesterday": "Kemarin",
+    "preset7Days": "7 hari",
+    "presetMonth": "Bulan ini",
+    "presetCustom": "Kustom",
+    "dateFrom": "Dari tanggal",
+    "dateTo": "Sampai tanggal",
+    "selectRange": "Pilih rentang tanggal",
+    "applyRange": "Terapkan rentang",
+    "errorRange": "Tanggal mulai tidak boleh melebihi tanggal akhir.",
+    "resetRange": "Reset filter"
   },
   "transactionDetail": {
     "title": "Detail transaksi",
@@ -276,7 +403,8 @@
       "totalSales": "Total penjualan",
       "transactionCount": "Jumlah transaksi",
       "averagePerTransaction": "Rata-rata per transaksi",
-      "grossProfit": "Laba kotor"
+      "grossProfit": "Laba kotor",
+      "stockValue": "Nilai stok"
     },
     "chart": {
       "title": "Penjualan harian",
@@ -294,6 +422,30 @@
     },
     "exportCsv": "Ekspor CSV",
     "exportSuccess": "Data transaksi berhasil diekspor."
+  },
+  "bulkStockIn": {
+    "title": "Barang Masuk Massal",
+    "subtitle": "Catat penerimaan stok untuk beberapa produk sekaligus.",
+    "backToProducts": "Kembali ke Produk",
+    "searchPlaceholder": "Cari nama produk atau scan barcode...",
+    "addProduct": "Pilih produk",
+    "table": {
+      "product": "Produk",
+      "currentStock": "Stok saat ini",
+      "qty": "Jumlah masuk",
+      "cost": "Harga modal baru",
+      "action": "Aksi"
+    },
+    "generalNote": "Catatan umum / No. Faktur",
+    "generalNotePlaceholder": "Contoh: Faktur Supplier PO-20261010-01",
+    "summary": {
+      "totalItems": "Total produk: {{count}}",
+      "totalUnits": "Total unit masuk: {{count}}"
+    },
+    "submit": "Simpan barang masuk",
+    "cancel": "Batal",
+    "toastSuccess": "Barang masuk berhasil dicatat.",
+    "emptyList": "Belum ada produk yang dipilih. Cari produk di atas untuk menambahkan ke daftar penerimaan."
   },
   "users": {
     "title": "Pengguna",
@@ -360,6 +512,59 @@
       "paperWidth": "Lebar kertas",
       "save": "Simpan pengaturan toko",
       "saved": "Pengaturan toko berhasil disimpan."
+    },
+    "features": {
+      "title": "Fitur tambahan",
+      "subtitle": "Aktifkan atau sesuaikan modul sesuai kebutuhan bisnis toko Anda.",
+      "notice": "Menonaktifkan fitur hanya menyembunyikan menu dan tampilan terkait, tanpa menghapus data yang sudah ada.",
+      "productViewTitle": "Tampilan produk kasir",
+      "viewPhoto": "Grid Foto (Menu Gambar)",
+      "viewCompact": "Daftar Ringkas (Barcode)",
+      "saved": "Pengaturan fitur berhasil diperbarui.",
+      "photos": {
+        "title": "Foto produk",
+        "description": "Tampilkan foto produk di kasir dan form produk untuk mempermudah pemilihan menu visual."
+      },
+      "stockIn": {
+        "title": "Stok masuk",
+        "description": "Catat riwayat penerimaan barang masuk dan perubahan mutasi inventaris toko."
+      },
+      "csvImport": {
+        "title": "Impor CSV",
+        "description": "Unggah dan impor daftar produk secara massal menggunakan berkas spreadsheet CSV."
+      },
+      "shifts": {
+        "title": "Shift kasir",
+        "description": "Kelola pembukaan dan penutupan shift kasir disertai hitung kas modal dan kas akhir."
+      },
+      "expenses": {
+        "title": "Biaya operasional",
+        "description": "Catat pengeluaran kas kecil operasional toko harian dan tautkan ke shift kasir."
+      },
+      "holdOrders": {
+        "title": "Gantung pesanan",
+        "description": "Simpan sementara keranjang pelanggan yang sedang mengantre dan lanjutkan transaksi nanti."
+      },
+      "tables": {
+        "title": "Nomor meja",
+        "description": "Tetapkan nomor meja atau pesanan makan di tempat (dine-in) pada setiap transaksi."
+      },
+      "variants": {
+        "title": "Varian produk",
+        "description": "Sediakan opsi variasi seperti ukuran porsi, level pedas, atau pilihan panas/dingin."
+      },
+      "receivables": {
+        "title": "Piutang / Kasbon",
+        "description": "Catat transaksi pelanggan yang belum lunas dan kelola pencatatan pelunasan tagihan."
+      },
+      "tax": {
+        "title": "Pajak (PPN)",
+        "description": "Hitung persentase tarif pajak pertambahan nilai pada total belanjaan pelanggan."
+      },
+      "serviceCharge": {
+        "title": "Biaya servis",
+        "description": "Tambahkan persentase biaya layanan restoran/kafe pada rincian pembayaran."
+      }
     },
     "printer": {
       "title": "Printer",

@@ -172,4 +172,18 @@ export const reportsRepo = {
       transactionCount: dayMap.get(date)!.transactionCount,
     }));
   },
+
+  /**
+   * Calculates total valuation of all stock on hand (sum of product.stock * product.cost).
+   */
+  async getTotalStockValue(database: PosDatabase = db): Promise<number> {
+    const products = await database.products.toArray();
+    let total = 0;
+    for (const p of products) {
+      if (p.stock > 0 && p.cost > 0) {
+        total += p.stock * p.cost;
+      }
+    }
+    return Math.round(total);
+  },
 };

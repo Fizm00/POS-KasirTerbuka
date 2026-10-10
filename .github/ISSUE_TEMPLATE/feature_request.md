@@ -1,9 +1,9 @@
 ---
 name: Usulan Fitur (Feature Request)
 about: Usulkan ide atau peningkatan untuk Kasir Terbuka
-title: '[FEAT] '
+title: "[FEAT] "
 labels: enhancement
-assignees: ''
+assignees: ""
 ---
 
 **Apakah usulan ini terkait masalah tertentu?**
@@ -13,6 +13,7 @@ Jelaskan kendala apa yang Anda hadapi di toko sehari-hari yang melatarbelakangi 
 Jelaskan secara spesifik fitur atau perbaikan apa yang Anda inginkan.
 
 **Kesesuaian dengan Prinsip Kasir Terbuka**
+
 - [ ] Berjalan 100% lokal tanpa backend/server eksternal
 - [ ] Gratis selamanya tanpa ketergantungan layanan berbayar
 - [ ] Cepat di meja kasir (< 30 detik per transaksi)

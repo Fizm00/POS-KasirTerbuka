@@ -10,22 +10,31 @@ import { ComponentGallery } from "./ComponentGallery";
 import { CashierPage } from "../features/pos/CashierPage";
 import { TransactionsPage } from "../features/transactions/TransactionsPage";
 import { ProductsPage } from "../features/products/ProductsPage";
+import { BulkStockInPage } from "../features/products/BulkStockInPage";
 import { ReportsPage } from "../features/reports/ReportsPage";
 import { UsersPage } from "../features/users/UsersPage";
 import { SettingsPage } from "../features/settings/SettingsPage";
+
+import { settingsRepo } from "../db/repositories/settingsRepo";
+import { useSettingsStore } from "../lib/features";
+import type { StoreSettings } from "../db/schema";
 
 export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();
   const { currentUser, isLocked } = useAuthStore();
   const [hasAdmin, setHasAdmin] = useState<boolean | null>(null);
+  const [settings, setSettings] = useState<StoreSettings | null>(
+    () => useSettingsStore.getState().settings
+  );
 
   useEffect(() => {
-    async function checkAdmin() {
-      const count = await usersRepo.countAdmins();
+    async function checkState() {
+      const [count, s] = await Promise.all([usersRepo.countAdmins(), settingsRepo.getSettings()]);
       setHasAdmin(count > 0);
+      setSettings(s);
     }
-    checkAdmin();
-  }, []);
+    checkState();
+  }, [location.pathname]);
 
   if (hasAdmin === null) {
     return null;
@@ -39,7 +48,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
     return <Navigate to="/kunci" replace state={{ from: location }} />;
   }
 
-  if (!canAccessRoute(currentUser.role, location.pathname)) {
+  if (!canAccessRoute(currentUser.role, location.pathname, settings)) {
     return <Navigate to="/kasir" replace />;
   }
 
@@ -114,6 +123,14 @@ export const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <ProductsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/stok-masuk"
+          element={
+            <ProtectedRoute>
+              <BulkStockInPage />
             </ProtectedRoute>
           }
         />

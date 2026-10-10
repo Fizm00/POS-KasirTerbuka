@@ -285,4 +285,34 @@ describe("CashierPage", () => {
     expect(payButton).toBeDisabled();
     expect(totalDisplay).toHaveTextContent("Rp 0");
   });
+
+  it("normalizes category display to sentence case, mutes zero-product categories, and supports F2", async () => {
+    // Add an all-caps empty category and an un-normalized category
+    const catEmptyId = crypto.randomUUID();
+    await db.categories.add({ id: catEmptyId, name: "KATEGORI KOSONG" });
+
+    render(
+      <MemoryRouter>
+        <CashierPage />
+      </MemoryRouter>
+    );
+
+    // Verify "KATEGORI KOSONG" is normalized to sentence case "Kategori kosong"
+    await waitFor(() => {
+      expect(screen.getByText("Kategori kosong")).toBeInTheDocument();
+    });
+
+    // Verify category with 0 items is disabled
+    const emptyCatChip = screen.getByRole("button", { name: /Kategori kosong/i });
+    expect(emptyCatChip).toBeDisabled();
+    expect(emptyCatChip).toHaveClass("opacity-40");
+
+    // Test F2 shortcut focuses search input
+    const searchInput = screen.getByPlaceholderText(/Cari produk atau scan barcode/i);
+    searchInput.blur();
+    expect(searchInput).not.toHaveFocus();
+
+    fireEvent.keyDown(window, { key: "F2" });
+    expect(searchInput).toHaveFocus();
+  });
 });

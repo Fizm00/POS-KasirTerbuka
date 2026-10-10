@@ -12,9 +12,7 @@ export function ReportMockup() {
   return (
     <div className="border border-[#E6E3DA] rounded-[2px] bg-white p-4 font-sans text-xs select-none">
       <div className="flex justify-between items-center pb-3 border-b border-[#E6E3DA]">
-        <div className="font-semibold text-sm text-[#1A1A18]">
-          Sales Report (Last 7 Days)
-        </div>
+        <div className="font-semibold text-sm text-[#1A1A18]">Sales Report (Last 7 Days)</div>
         <div className="text-[11px] text-[#5F5E58] border border-[#E6E3DA] rounded px-2 py-0.5">
           Export CSV
         </div>

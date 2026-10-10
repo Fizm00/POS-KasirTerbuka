@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Table, type TableColumn } from "../../components/Table";
+import { Table, type TableColumn, type SortDirection } from "../../components/Table";
+import { CustomSelect } from "../../components/CustomSelect";
+import { DateRangePicker } from "../../components/DateRangePicker";
 import { settingsRepo } from "../../db/repositories/settingsRepo";
 import { transactionsRepo } from "../../db/repositories/transactionsRepo";
 import { usersRepo } from "../../db/repositories/usersRepo";
@@ -28,6 +30,10 @@ export const TransactionsPage: React.FC = () => {
   const [selectedCashierId, setSelectedCashierId] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
+
+  // Sorting state
+  const [sortColumn, setSortColumn] = useState<string>("createdAt");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
 
   // Load users and settings once
   useEffect(() => {
@@ -73,12 +79,53 @@ export const TransactionsPage: React.FC = () => {
     };
   }, [currentUser, startDate, endDate, selectedCashierId, selectedStatus]);
 
+  // Sorting handler
+  const handleSort = (key: string) => {
+    if (sortColumn === key) {
+      if (sortDirection === "asc") {
+        setSortDirection("desc");
+      } else if (sortDirection === "desc") {
+        setSortColumn("createdAt");
+        setSortDirection("desc");
+      }
+    } else {
+      setSortColumn(key);
+      setSortDirection("asc");
+    }
+  };
+
+  // Sorted transactions
+  const sortedTransactions = useMemo(() => {
+    if (!sortColumn || !sortDirection) return transactions;
+    return [...transactions].sort((a, b) => {
+      let aVal: string | number = (a as unknown as Record<string, unknown>)[sortColumn] as
+        string | number;
+      let bVal: string | number = (b as unknown as Record<string, unknown>)[sortColumn] as
+        string | number;
+      if (sortColumn === "cashierId") {
+        aVal = usersMap.get(a.cashierId) || "";
+        bVal = usersMap.get(b.cashierId) || "";
+      }
+      if (typeof aVal === "number" && typeof bVal === "number") {
+        return sortDirection === "asc" ? aVal - bVal : bVal - aVal;
+      }
+      const aStr = String(aVal || "");
+      const bStr = String(bVal || "");
+      return sortDirection === "asc" ? aStr.localeCompare(bStr) : bStr.localeCompare(aStr);
+    });
+  }, [transactions, sortColumn, sortDirection, usersMap]);
+
   // Pagination slicing
-  const totalPages = Math.max(1, Math.ceil(transactions.length / PAGE_SIZE));
+  const totalPages = Math.max(1, Math.ceil(sortedTransactions.length / PAGE_SIZE));
   const paginatedTransactions = useMemo(() => {
     const start = (currentPage - 1) * PAGE_SIZE;
-    return transactions.slice(start, start + PAGE_SIZE);
-  }, [transactions, currentPage]);
+    return sortedTransactions.slice(start, start + PAGE_SIZE);
+  }, [sortedTransactions, currentPage]);
+
+  // Summary line: total of filtered transactions
+  const filteredTotal = useMemo(() => {
+    return transactions.reduce((acc, tx) => acc + tx.total, 0);
+  }, [transactions]);
 
   const handleVoidConfirm = async (txId: string, reason: string): Promise<Transaction> => {
     if (!currentUser) throw new Error("Pengguna belum masuk.");
@@ -100,6 +147,7 @@ export const TransactionsPage: React.FC = () => {
     {
       key: "invoiceNo",
       header: t("history.table.invoiceNo"),
+      sortable: true,
       render: (tx) => (
         <span className="font-mono font-medium text-[var(--text)]">{tx.invoiceNo}</span>
       ),
@@ -107,6 +155,7 @@ export const TransactionsPage: React.FC = () => {
     {
       key: "createdAt",
       header: t("history.table.time"),
+      sortable: true,
       render: (tx) => (
         <span className="tabular-nums text-[var(--text)]">
           {formatReceiptDateTime(tx.createdAt).full}
@@ -116,6 +165,7 @@ export const TransactionsPage: React.FC = () => {
     {
       key: "cashierId",
       header: t("history.table.cashier"),
+      sortable: true,
       render: (tx) => (
         <span className="text-[var(--text)]">{usersMap.get(tx.cashierId) || "Kasir"}</span>
       ),
@@ -131,6 +181,7 @@ export const TransactionsPage: React.FC = () => {
       key: "total",
       header: t("history.table.total"),
       isNumeric: true,
+      sortable: true,
       render: (tx) => (
         <span className="tabular-nums font-semibold text-[var(--text)]">
           {formatRupiah(tx.total)}
@@ -140,6 +191,7 @@ export const TransactionsPage: React.FC = () => {
     {
       key: "status",
       header: t("history.table.status"),
+      sortable: true,
       render: (tx) => {
         const isVoid = tx.status === "void";
         return (
@@ -186,83 +238,60 @@ export const TransactionsPage: React.FC = () => {
 
       {/* Filter Toolbar */}
       <div className="flex flex-wrap items-end gap-3 bg-[var(--surface)] p-4 border border-[var(--border)] rounded-[var(--radius-control)]">
-        {/* Date From */}
+        {/* Date Range Picker */}
         <div className="space-y-1">
           <label className="block text-xs font-medium text-[var(--text-muted)]">
-            {t("history.filterDateFrom")}
+            {t("datePicker.selectRange")}
           </label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => {
-              setStartDate(e.target.value);
+          <DateRangePicker
+            startDate={startDate}
+            endDate={endDate}
+            allowEmpty
+            onChange={(s, e) => {
+              setStartDate(s);
+              setEndDate(e);
               setCurrentPage(1);
             }}
-            aria-label={t("history.filterDateFrom")}
-            className="min-h-[48px] h-[48px] px-3 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
-          />
-        </div>
-
-        {/* Date To */}
-        <div className="space-y-1">
-          <label className="block text-xs font-medium text-[var(--text-muted)]">
-            {t("history.filterDateTo")}
-          </label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => {
-              setEndDate(e.target.value);
-              setCurrentPage(1);
-            }}
-            aria-label={t("history.filterDateTo")}
-            className="min-h-[48px] h-[48px] px-3 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
           />
         </div>
 
         {/* Cashier Filter (Admin only) */}
         {isAdmin && (
-          <div className="space-y-1">
-            <label className="block text-xs font-medium text-[var(--text-muted)]">
-              {t("history.filterCashier")}
-            </label>
-            <select
+          <div className="w-52">
+            <CustomSelect
+              id="history-cashier-filter"
+              label={t("history.filterCashier")}
+              aria-label={t("history.filterCashier")}
               value={selectedCashierId}
-              onChange={(e) => {
-                setSelectedCashierId(e.target.value);
+              onChange={(val) => {
+                setSelectedCashierId(val);
                 setCurrentPage(1);
               }}
-              aria-label={t("history.filterCashier")}
-              className="min-h-[48px] h-[48px] px-3.5 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
-            >
-              <option value="">{t("history.allCashiers")}</option>
-              {users.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name} ({u.role})
-                </option>
-              ))}
-            </select>
+              options={[
+                { value: "", label: t("history.allCashiers") },
+                ...users.map((u) => ({ value: u.id, label: `${u.name} (${u.role})` })),
+              ]}
+            />
           </div>
         )}
 
         {/* Status Filter */}
-        <div className="space-y-1">
-          <label className="block text-xs font-medium text-[var(--text-muted)]">
-            {t("history.filterStatus")}
-          </label>
-          <select
+        <div className="w-44">
+          <CustomSelect
+            id="history-status-filter"
+            label={t("history.filterStatus")}
+            aria-label={t("history.filterStatus")}
             value={selectedStatus}
-            onChange={(e) => {
-              setSelectedStatus(e.target.value);
+            onChange={(val) => {
+              setSelectedStatus(val);
               setCurrentPage(1);
             }}
-            aria-label={t("history.filterStatus")}
-            className="min-h-[48px] h-[48px] px-3.5 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
-          >
-            <option value="">{t("history.allStatuses")}</option>
-            <option value="completed">{t("history.statusCompleted")}</option>
-            <option value="void">{t("history.statusVoid")}</option>
-          </select>
+            options={[
+              { value: "", label: t("history.allStatuses") },
+              { value: "completed", label: t("history.statusCompleted") },
+              { value: "void", label: t("history.statusVoid") },
+            ]}
+          />
         </div>
 
         {/* Reset Filters */}
@@ -278,9 +307,19 @@ export const TransactionsPage: React.FC = () => {
             }}
             className="min-h-[48px] px-3 py-2 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] cursor-pointer"
           >
-            Reset filter
+            {t("history.resetFilter")}
           </button>
         )}
+      </div>
+
+      {/* Filtered Result Summary Line */}
+      <div className="flex items-center justify-between text-sm font-medium text-[var(--text-muted)] px-1">
+        <span>
+          {t("history.summaryLine", {
+            count: transactions.length,
+            total: formatRupiah(filteredTotal),
+          })}
+        </span>
       </div>
 
       {/* Transactions Table */}
@@ -292,6 +331,9 @@ export const TransactionsPage: React.FC = () => {
         currentPage={currentPage}
         totalPages={totalPages}
         onPageChange={setCurrentPage}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        onSort={handleSort}
         emptyMessage={
           hasActiveFilters ? t("history.empty.noFilterResults") : t("history.empty.noTransactions")
         }

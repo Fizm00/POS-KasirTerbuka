@@ -9,7 +9,9 @@ export function Receipt() {
       <div className="bg-white rounded-t-[2px] p-4 sm:p-6 text-[#1A1A18] font-receipt-mono text-[13px] leading-relaxed">
         {/* Store Header */}
         <div className="text-center pb-2.5 sm:pb-3">
-          <div className="font-semibold text-sm sm:text-base tracking-tight text-[#1A1A18]">Toko Berkah</div>
+          <div className="font-semibold text-sm sm:text-base tracking-tight text-[#1A1A18]">
+            Toko Berkah
+          </div>
           <div className="text-[11px] sm:text-xs text-[#5F5E58] mt-0.5">INV-20261009-0012</div>
           <div className="text-[11px] sm:text-xs text-[#5F5E58]">09/10/2026 14:32</div>
         </div>

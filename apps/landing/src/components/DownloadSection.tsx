@@ -15,36 +15,36 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
     return {
       platform: "windows",
       label: "Download for Windows",
-      versionText: "Version 1.0.0, 2.4 MB",
-      href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
-      filename: "Kasir-Terbuka-Setup-1.0.0.exe",
+      versionText: "Version 1.1.0, 2.4 MB",
+      href: "/downloads/Kasir-Terbuka-Setup-1.1.0.exe",
+      filename: "Kasir-Terbuka-Setup-1.1.0.exe",
     };
   }
   if (initialPlatform === "macos") {
     return {
       platform: "macos",
       label: "Download for macOS",
-      versionText: "Version 1.0.0, 78 MB",
-      href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
-      filename: "Kasir-Terbuka-1.0.0.dmg",
+      versionText: "Version 1.1.0, 78 MB",
+      href: "/downloads/Kasir-Terbuka-1.1.0.dmg",
+      filename: "Kasir-Terbuka-1.1.0.dmg",
     };
   }
   if (initialPlatform === "linux") {
     return {
       platform: "linux",
       label: "Download for Linux",
-      versionText: "Version 1.0.0, 82 MB",
-      href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
-      filename: "Kasir-Terbuka-1.0.0.AppImage",
+      versionText: "Version 1.1.0, 82 MB",
+      href: "/downloads/Kasir-Terbuka-1.1.0.AppImage",
+      filename: "Kasir-Terbuka-1.1.0.AppImage",
     };
   }
   if (initialPlatform === "android") {
     return {
       platform: "android",
       label: "Download for Android",
-      versionText: "Version 1.0.0, 4.7 MB (APK)",
-      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-      filename: "Kasir-Terbuka-1.0.0.apk",
+      versionText: "Version 1.1.0, 4.7 MB (APK)",
+      href: "/downloads/Kasir-Terbuka-1.1.0.apk",
+      filename: "Kasir-Terbuka-1.1.0.apk",
     };
   }
   if (typeof navigator !== "undefined") {
@@ -53,36 +53,36 @@ function getDetectedPlatform(initialPlatform?: "windows" | "android" | "macos" |
       return {
         platform: "android",
         label: "Download for Android",
-        versionText: "Version 1.0.0, 4.7 MB (APK)",
-        href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-        filename: "Kasir-Terbuka-1.0.0.apk",
+        versionText: "Version 1.1.0, 4.7 MB (APK)",
+        href: "/downloads/Kasir-Terbuka-1.1.0.apk",
+        filename: "Kasir-Terbuka-1.1.0.apk",
       };
     }
     if (ua.includes("mac")) {
       return {
         platform: "macos",
         label: "Download for macOS",
-        versionText: "Version 1.0.0, 78 MB",
-        href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
-        filename: "Kasir-Terbuka-1.0.0.dmg",
+        versionText: "Version 1.1.0, 78 MB",
+        href: "/downloads/Kasir-Terbuka-1.1.0.dmg",
+        filename: "Kasir-Terbuka-1.1.0.dmg",
       };
     }
     if (ua.includes("linux")) {
       return {
         platform: "linux",
         label: "Download for Linux",
-        versionText: "Version 1.0.0, 82 MB",
-        href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
-        filename: "Kasir-Terbuka-1.0.0.AppImage",
+        versionText: "Version 1.1.0, 82 MB",
+        href: "/downloads/Kasir-Terbuka-1.1.0.AppImage",
+        filename: "Kasir-Terbuka-1.1.0.AppImage",
       };
     }
   }
   return {
     platform: "windows",
     label: "Download for Windows",
-    versionText: "Version 1.0.0, 2.4 MB",
-    href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
-    filename: "Kasir-Terbuka-Setup-1.0.0.exe",
+    versionText: "Version 1.1.0, 2.4 MB",
+    href: "/downloads/Kasir-Terbuka-Setup-1.1.0.exe",
+    filename: "Kasir-Terbuka-Setup-1.1.0.exe",
   };
 }
 
@@ -107,29 +107,29 @@ export function DownloadSection({ initialPlatform }: DownloadSectionProps = {}) 
       name: "Windows (.exe)",
       type: "link",
       actionText: "Download",
-      href: "/downloads/Kasir-Terbuka-Setup-1.0.0.exe",
-      filename: "Kasir-Terbuka-Setup-1.0.0.exe",
+      href: "/downloads/Kasir-Terbuka-Setup-1.1.0.exe",
+      filename: "Kasir-Terbuka-Setup-1.1.0.exe",
     },
     {
       name: "macOS (.dmg)",
       type: "link",
       actionText: "Download",
-      href: "/downloads/Kasir-Terbuka-1.0.0.dmg",
-      filename: "Kasir-Terbuka-1.0.0.dmg",
+      href: "/downloads/Kasir-Terbuka-1.1.0.dmg",
+      filename: "Kasir-Terbuka-1.1.0.dmg",
     },
     {
       name: "Linux (.AppImage)",
       type: "link",
       actionText: "Download",
-      href: "/downloads/Kasir-Terbuka-1.0.0.AppImage",
-      filename: "Kasir-Terbuka-1.0.0.AppImage",
+      href: "/downloads/Kasir-Terbuka-1.1.0.AppImage",
+      filename: "Kasir-Terbuka-1.1.0.AppImage",
     },
     {
       name: "Android (.apk)",
       type: "link",
       actionText: "Download",
-      href: "/downloads/Kasir-Terbuka-1.0.0.apk",
-      filename: "Kasir-Terbuka-1.0.0.apk",
+      href: "/downloads/Kasir-Terbuka-1.1.0.apk",
+      filename: "Kasir-Terbuka-1.1.0.apk",
     },
     {
       name: "iOS (.ipa)",

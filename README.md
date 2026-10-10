@@ -35,16 +35,19 @@ Kasir Terbuka installs on desktop PC, tablet, and smartphone as a Progressive We
 - **Product & Category Catalog (`/produk`):**
   - Full CRUD for products (name, SKU, category, selling price, cost price, stock, low-stock threshold).
   - Low-stock filter toggle.
+  - CSV catalog import with validation preview and template generator (`/produk` modal).
+  - Individual stock drawer: quick stock-in, stock adjustment (opname) with delta calculation, and audit history.
+  - Bulk stock-in page (`/stok-masuk`) for batch purchase receipts.
   - Category management with active-product deletion guard.
 - **Sales Reports (`/laporan`):**
   - Date presets (Hari ini, 7 hari terakhir, Bulan ini, Custom range).
-  - Key metrics: Total penjualan, Jumlah transaksi, Rata-rata per transaksi, Laba kotor.
+  - Key metrics: Total penjualan, Jumlah transaksi, Rata-rata per transaksi, Laba kotor, and Nilai persediaan (stok).
   - Single-color daily sales bar chart and top-selling products table.
   - CSV export for spreadsheets (Excel / Google Sheets).
 - **User Management & Local PIN Security (`/pengguna`):**
   - Multi-user support with `admin` and `kasir` roles.
   - PBKDF2 salted hash local PIN authentication.
-  - *Security transparency note:* Local PIN protection is designed to deter casual use between staff shifts at the counter. It is not strong protection against an attacker with direct physical or developer-tools access to the device. Store managers should maintain device-level physical security.
+  - _Security transparency note:_ Local PIN protection is designed to deter casual use between staff shifts at the counter. It is not strong protection against an attacker with direct physical or developer-tools access to the device. Store managers should maintain device-level physical security.
   - Last-admin deactivation protection.
   - Configurable inactivity auto-lock (1–15 minutes).
 - **Store Settings & Data Backup (`/pengaturan`):**

@@ -38,7 +38,9 @@ describe("SettingsPage & Backup/Restore", () => {
 
     // Verify initial values loaded
     const nameInput = await screen.findByLabelText(/Nama toko/i);
-    expect(nameInput).toHaveValue("Toko Berkah");
+    await waitFor(() => {
+      expect(nameInput).toHaveValue("Toko Berkah");
+    });
 
     // Change store name, address, footer, and paper width to 80mm
     await userEvent.clear(nameInput);
@@ -105,7 +107,7 @@ describe("SettingsPage & Backup/Restore", () => {
     expect(receipt.columnWidth).toBe(48); // 80mm column width is 48 chars
     expect(receipt.rawText).toContain("Warung Nusantara");
     expect(receipt.rawText).toContain("Matur nuwun, berkah selalu!");
-  });
+  }, 15000);
 
   it("exports backup JSON, saves lastBackupAt, and triggers download", async () => {
     const createObjectUrlMock = vi.fn().mockReturnValue("blob:mock-backup-url");
@@ -418,11 +420,42 @@ describe("SettingsPage & Backup/Restore", () => {
     expect(
       screen.getByText(/Aplikasi desktop terpasang \(Windows \/ Native\)/i)
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: /Pasang di perangkat/i })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: /Pasang di perangkat/i })).not.toBeInTheDocument();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (window as any).__TAURI_INTERNALS__;
+  });
+
+  it("toggles modular features and persists updates to database", async () => {
+    render(
+      <MemoryRouter>
+        <SettingsPage />
+      </MemoryRouter>
+    );
+
+    expect(await screen.findByRole("heading", { name: /Fitur tambahan/i })).toBeInTheDocument();
+    expect(screen.getByText(/Menonaktifkan fitur hanya menyembunyikan menu/i)).toBeInTheDocument();
+
+    // Find switch for Foto produk
+    const photoSwitch = screen.getByRole("switch", { name: /Foto produk/i });
+    expect(photoSwitch).toHaveAttribute("aria-checked", "false");
+
+    // Click switch to enable
+    await userEvent.click(photoSwitch);
+    expect(photoSwitch).toHaveAttribute("aria-checked", "true");
+
+    // Verify in database
+    await waitFor(async () => {
+      const saved = await settingsRepo.getSettings();
+      expect(saved.features?.photos).toBe(true);
+    });
+
+    // Toggle back off
+    await userEvent.click(photoSwitch);
+    expect(photoSwitch).toHaveAttribute("aria-checked", "false");
+    await waitFor(async () => {
+      const saved = await settingsRepo.getSettings();
+      expect(saved.features?.photos).toBe(false);
+    });
   });
 });

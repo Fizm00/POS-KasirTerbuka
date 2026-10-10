@@ -148,6 +148,19 @@ Menu **Produk** digunakan untuk mengelola data katalog barang (khusus Admin):
   - Nama produk, SKU (kode unik barang / barcode), kategori, harga jual, harga modal (HPP), stok saat ini, dan batas stok menipis.
 - **Filter Stok Menipis:**
   - Toggle tombol filter stok menipis untuk melihat barang-barang yang perlu segera dipesan ulang ke pemasok.
+- **Impor Produk dari CSV:**
+  - Klik tombol **Impor CSV** pada halaman produk untuk memuat ratusan produk sekaligus dari file spreadsheet.
+  - Sistem menampilkan dialog pratinjau validasi: jumlah produk baru yang akan ditambahkan, produk yang akan diperbarui (berdasarkan SKU), serta daftar baris yang tidak valid dengan nomor baris dan keterangannya.
+  - Nama kategori baru pada CSV akan dibuatkan kategori otomatis jika belum terdaftar.
+  - Klik **Unduh format CSV** untuk mendapatkan contoh berkas template standar (`Template-Import-Produk.csv`).
+- **Kelola Stok Per Produk (Stok Masuk, Penyesuaian & Riwayat):**
+  - Klik tombol **Stok** pada baris produk untuk membuka laci interaktif manajemen stok dengan 3 tab:
+    1. **Barang masuk:** Tambah stok barang yang baru dibeli dari supplier, dengan opsi memperbarui harga modal (HPP).
+    2. **Penyesuaian (Opname):** Masukkan jumlah stok fisik sebenarnya di toko. Sistem akan menghitung selisih (delta positif/negatif) secara otomatis beserta alasan penyesuaian (rusak, hilang, koreksi hitung).
+    3. **Riwayat stok:** Catatan audit kronologis pergerakan stok (barang masuk, penjualan, pembatalan/void, dan penyesuaian manual).
+- **Barang Masuk Masal (`/stok-masuk`):**
+  - Klik tombol **+ Barang masuk** di sudut kanan atas halaman produk untuk membuka halaman penerimaan barang banyak sekaligus.
+  - Cari produk, masukkan kuantitas dan harga beli baru per barang, lalu simpan secara atomik.
 - **Manajemen Kategori:**
   - Tambah dan hapus kategori produk. Kategori yang masih memiliki produk terkait tidak dapat dihapus sembarangan untuk mencegah inkonsistensi data.
 
@@ -164,6 +177,7 @@ Menu **Laporan** menyajikan rangkuman bisnis toko:
   - **Jumlah transaksi:** Total transaksi selesai.
   - **Rata-rata per transaksi:** Nilai transaksi rata-rata (basket size).
   - **Laba kotor:** Total pendapatan dikurangi total harga modal (HPP).
+  - **Nilai persediaan:** Estimasi nilai aset modal seluruh stok produk aktif yang tersimpan di toko (`stok * harga modal`), tampil saat fitur barang masuk aktif.
 - **Grafik Penjualan Harian:**
   - Visualisasi tren penjualan harian sederhana.
 - **Produk Terlaris:**
@@ -185,7 +199,7 @@ Menu **Pengguna** memungkinkan pengelolaan akun staf kasir (khusus Admin):
   - Admin dapat mengatur ulang PIN staf yang lupa PIN.
   - Staf dapat mengubah PIN pribadi mereka melalui menu Pengaturan.
   - Proteksi Admin Terakhir: Sistem mencegah penonaktifan satu-satunya admin aktif untuk menghindari terkuncinya akses manajemen.
-  - *Catatan Batasan Keamanan:* Perlindungan PIN lokal dirancang untuk mencegah penggunaan kasual antar staf saat pergantian giliran kerja di meja kasir. PIN lokal **bukan** sistem keamanan mutlak terhadap pihak yang memiliki akses fisik langsung ke perangkat atau alat pengembang peramban (developer tools). Selalu jaga keamanan fisik perangkat dan kunci perangkat utama Anda.
+  - _Catatan Batasan Keamanan:_ Perlindungan PIN lokal dirancang untuk mencegah penggunaan kasual antar staf saat pergantian giliran kerja di meja kasir. PIN lokal **bukan** sistem keamanan mutlak terhadap pihak yang memiliki akses fisik langsung ke perangkat atau alat pengembang peramban (developer tools). Selalu jaga keamanan fisik perangkat dan kunci perangkat utama Anda.
 - **Kunci Otomatis (Auto-Lock):**
   - Layar akan terkunci otomatis jika tidak ada aktivitas pengguna dalam durasi tertentu (1, 2, 5, 10, atau 15 menit).
 
@@ -197,10 +211,11 @@ Menu **Pengaturan** menyediakan konfigurasi operasional toko:
 
 1. **Pengaturan Toko:**
    - Ubah Nama Toko, Alamat, Telepon, Teks Kaki Struk, dan Lebar Kertas (58 mm / 80 mm).
+   - Pengaturan Fitur Modular: Aktifkan atau nonaktifkan fitur tambahan sesuai jenis bisnis (Foto produk, Barang masuk, Impor CSV).
 2. **Pemasangan Aplikasi:**
-   - Menampilkan status instalasi (mode mandiri/PWA atau peramban web) serta panduan pemasangan.
+   - Menampilkan status instalasi (mode mandiri/PWA, aplikasi desktop native, atau peramban web) serta panduan pemasangan.
 3. **Cadangan Data (Sangat Penting):**
    - Karena data disimpan di perangkat Anda sendiri, **sangat disarankan mengekspor cadangan secara berkala** (misal seminggu sekali atau setiap tutup toko).
-   - **Ekspor cadangan (JSON):** Mengunduh seluruh database toko (produk, kategori, transaksi, pengguna, pengaturan) ke dalam satu file berkas `.json`. Simpan berkas ini di flashdisk atau Google Drive.
-   - **Impor cadangan:** Memulihkan seluruh data toko dari file `.json`. Sistem akan menampilkan dialog konfirmasi yang merinci berapa banyak produk, transaksi, dan pengguna yang akan dimuat sebelum data digantikan secara aman dan atomik.
+   - **Ekspor cadangan (Format v2 .zip):** Mengunduh seluruh basis data toko (pengaturan, pengguna, kategori, produk, transaksi, pergerakan stok, dan foto produk) ke dalam satu berkas arsip `.zip`. Simpan berkas ini di flashdisk atau penyimpanan awan aman Anda.
+   - **Impor cadangan:** Memulihkan seluruh data toko dari file `.zip` (v2) maupun berkas lama `.json` (v1). Sistem secara otomatis memvalidasi keutuhan data dan menampilkan dialog rincian entitas yang akan dimuat sebelum data dipulihkan secara aman dan atomik.
    - **Peringatan Tenang:** Jika data belum pernah dicadangkan selama lebih dari 7 hari, pengingat tenang akan muncul di area layar kasir dan pengaturan.

@@ -1,4 +1,5 @@
 import { db, PosDatabase, type Product } from "../schema";
+import { productImagesRepo } from "./productImagesRepo";
 
 export const productsRepo = {
   async getAll(database: PosDatabase = db): Promise<Product[]> {
@@ -55,6 +56,7 @@ export const productsRepo = {
 
   async delete(id: string, database: PosDatabase = db): Promise<void> {
     await database.products.delete(id);
+    await productImagesRepo.removeProductImage(id, database);
   },
 
   async getLowStock(database: PosDatabase = db): Promise<Product[]> {

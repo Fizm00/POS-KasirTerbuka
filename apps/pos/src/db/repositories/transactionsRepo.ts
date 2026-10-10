@@ -87,11 +87,11 @@ export const transactionsRepo = {
 
     return database.transaction(
       "rw",
-      [database.products, database.transactions, database.counters],
+      [database.products, database.transactions, database.counters, database.stockMovements],
       async () => {
         // 1. Fetch and validate each product
         const itemSnapshots: TransactionItemSnapshot[] = [];
-        const productsToUpdate: Array<{ id: string; newStock: number }> = [];
+        const productsToUpdate: Array<{ id: string; qty: number; newStock: number }> = [];
 
         for (const inputItem of input.items) {
           if (inputItem.qty <= 0) {
@@ -128,6 +128,7 @@ export const transactionsRepo = {
 
           productsToUpdate.push({
             id: product.id,
+            qty: inputItem.qty,
             newStock: product.stock - inputItem.qty,
           });
         }
@@ -172,6 +173,21 @@ export const transactionsRepo = {
         };
 
         await database.transactions.add(transaction);
+
+        // 6. Record stock movements for all sold items atomically
+        for (const update of productsToUpdate) {
+          await database.stockMovements.add({
+            id: crypto.randomUUID(),
+            productId: update.id,
+            type: "sale",
+            qty: -update.qty,
+            resultingStock: update.newStock,
+            note: `Invoice ${invoiceNo}`,
+            userId: input.cashierId,
+            createdAt: saleDate.toISOString(),
+          });
+        }
+
         return transaction;
       }
     );
@@ -182,6 +198,7 @@ export const transactionsRepo = {
    * - Only completed sales can be voided.
    * - Restores stock for all snapshot items.
    * - Records voidedBy, voidedAt, and voidReason.
+   * - Records void stock movements for each restored product atomically.
    * - Rejects second void attempt on the same transaction.
    */
   async voidSale(
@@ -195,38 +212,56 @@ export const transactionsRepo = {
 
     const voidDate = voidData.customDate || new Date();
 
-    return database.transaction("rw", [database.products, database.transactions], async () => {
-      const transaction = await database.transactions.get(transactionId);
-      if (!transaction) {
-        throw new TransactionNotFoundError(transactionId);
-      }
-
-      if (transaction.status === "void") {
-        throw new SaleAlreadyVoidedError(transaction.invoiceNo);
-      }
-
-      // Restore stock for all items
-      for (const item of transaction.items) {
-        const product = await database.products.get(item.productId);
-        if (product) {
-          await database.products.update(product.id, {
-            stock: product.stock + item.qty,
-          });
+    return database.transaction(
+      "rw",
+      [database.products, database.transactions, database.stockMovements],
+      async () => {
+        const transaction = await database.transactions.get(transactionId);
+        if (!transaction) {
+          throw new TransactionNotFoundError(transactionId);
         }
+
+        if (transaction.status === "void") {
+          throw new SaleAlreadyVoidedError(transaction.invoiceNo);
+        }
+
+        // Restore stock and record stock movements for all items
+        for (const item of transaction.items) {
+          const product = await database.products.get(item.productId);
+          if (product) {
+            const newStock = product.stock + item.qty;
+            await database.products.update(product.id, {
+              stock: newStock,
+            });
+
+            await database.stockMovements.add({
+              id: crypto.randomUUID(),
+              productId: item.productId,
+              type: "void",
+              qty: item.qty,
+              resultingStock: newStock,
+              note: voidData.voidReason
+                ? `Void ${transaction.invoiceNo}: ${voidData.voidReason}`
+                : `Void ${transaction.invoiceNo}`,
+              userId: voidData.voidedBy,
+              createdAt: voidDate.toISOString(),
+            });
+          }
+        }
+
+        // Update transaction status
+        const updatedTransaction: Transaction = {
+          ...transaction,
+          status: "void",
+          voidedBy: voidData.voidedBy,
+          voidedAt: voidDate.toISOString(),
+          voidReason: voidData.voidReason,
+        };
+
+        await database.transactions.put(updatedTransaction);
+        return updatedTransaction;
       }
-
-      // Update transaction status
-      const updatedTransaction: Transaction = {
-        ...transaction,
-        status: "void",
-        voidedBy: voidData.voidedBy,
-        voidedAt: voidDate.toISOString(),
-        voidReason: voidData.voidReason,
-      };
-
-      await database.transactions.put(updatedTransaction);
-      return updatedTransaction;
-    });
+    );
   },
 
   /**

@@ -86,6 +86,21 @@ describe("transactionsRepo", () => {
     const p2 = await testDb.products.get(sampleProductId2);
     expect(p1?.stock).toBe(8); // 10 - 2
     expect(p2?.stock).toBe(4); // 5 - 1
+
+    // Verify stock movements were created atomically
+    const movements = await testDb.stockMovements.toArray();
+    expect(movements).toHaveLength(2);
+    const m1 = movements.find((m) => m.productId === sampleProductId1);
+    const m2 = movements.find((m) => m.productId === sampleProductId2);
+    expect(m1).toBeDefined();
+    expect(m1?.type).toBe("sale");
+    expect(m1?.qty).toBe(-2);
+    expect(m1?.resultingStock).toBe(8);
+    expect(m1?.note).toBe("Invoice INV-20261009-0001");
+    expect(m2).toBeDefined();
+    expect(m2?.type).toBe("sale");
+    expect(m2?.qty).toBe(-1);
+    expect(m2?.resultingStock).toBe(4);
   });
 
   it("aborts the whole sale and leaves stock untouched when stock is insufficient", async () => {
@@ -113,9 +128,11 @@ describe("transactionsRepo", () => {
     expect(p1?.stock).toBe(10);
     expect(p2?.stock).toBe(5);
 
-    // No transaction or counter saved
+    // No transaction, counter, or stock movement saved
     const txCount = await testDb.transactions.count();
     expect(txCount).toBe(0);
+    const smCount = await testDb.stockMovements.count();
+    expect(smCount).toBe(0);
   });
 
   it("handles two competing sales for the last unit (only one succeeds, stock reaches 0)", async () => {
@@ -226,6 +243,15 @@ describe("transactionsRepo", () => {
 
     // Stock must be restored back to 10
     expect((await testDb.products.get(sampleProductId1))?.stock).toBe(10);
+
+    // Stock movements must record the void atomically
+    const movements = await testDb.stockMovements.toArray();
+    expect(movements).toHaveLength(2); // 1 sale + 1 void
+    const voidMovement = movements.find((m) => m.type === "void");
+    expect(voidMovement).toBeDefined();
+    expect(voidMovement?.qty).toBe(3);
+    expect(voidMovement?.resultingStock).toBe(10);
+    expect(voidMovement?.note).toContain("Salah input jumlah");
 
     // Second void must be rejected and stock must stay at 10 (not double restored)
     await expect(

@@ -1,18 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Search, ShoppingBag } from "lucide-react";
+import { Search, ShoppingBag, LayoutGrid, List } from "lucide-react";
 import { productsRepo } from "../../db/repositories/productsRepo";
 import { categoriesRepo } from "../../db/repositories/categoriesRepo";
 import { settingsRepo } from "../../db/repositories/settingsRepo";
+import { productImagesRepo } from "../../db/repositories/productImagesRepo";
 import { transactionsRepo, InsufficientStockError } from "../../db/repositories/transactionsRepo";
-import type { Category, PaymentMethod, Product, StoreSettings, Transaction } from "../../db/schema";
+import type {
+  Category,
+  PaymentMethod,
+  Product,
+  ProductViewMode,
+  StoreSettings,
+  Transaction,
+} from "../../db/schema";
 import { useAuthStore } from "../auth/authStore";
 import { useCartStore } from "./cartStore";
-import { ProductTile } from "./ProductTile";
+import { VirtualizedProductGrid } from "./VirtualizedProductGrid";
+import { useFeatureEnabled } from "../../lib/features";
 import { CartPanel } from "./CartPanel";
 import { PaymentModal } from "./PaymentModal";
 import { TransactionSuccessModal } from "./TransactionSuccessModal";
 import { Chip } from "../../components/Chip";
 import { formatRupiah } from "../../lib/money";
+import { toSentenceCase } from "../../lib/text";
 import { t } from "../../i18n";
 
 export const CashierPage: React.FC = () => {
@@ -23,6 +33,10 @@ export const CashierPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobileCartOpen, setIsMobileCartOpen] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+
+  const isPhotosEnabled = useFeatureEnabled("photos");
+  const [viewMode, setViewMode] = useState<ProductViewMode>("compact");
+  const [thumbnails, setThumbnails] = useState<Record<string, string>>({});
 
   // Payment and success modals state
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
@@ -45,8 +59,45 @@ export const CashierPage: React.FC = () => {
       setProducts(prods);
       setCategories(cats);
       setSettings(sets);
+      if (sets?.productView) {
+        setViewMode(sets.productView);
+      }
     }
     loadData();
+  }, []);
+
+  // Effective view mode: forced to compact if photos feature is disabled
+  const effectiveViewMode: ProductViewMode = isPhotosEnabled ? viewMode : "compact";
+
+  const handleToggleViewMode = async () => {
+    const nextMode: ProductViewMode = viewMode === "photo" ? "compact" : "photo";
+    setViewMode(nextMode);
+    await settingsRepo.updateSettings({ productView: nextMode });
+  };
+
+  // Load thumbnails for active products when photos feature is active
+  useEffect(() => {
+    if (!isPhotosEnabled || products.length === 0) {
+      return;
+    }
+
+    let isMounted = true;
+    const initialBatch = products.slice(0, 100).map((p) => p.id);
+    productImagesRepo.listThumbnails(initialBatch).then((map) => {
+      if (isMounted) {
+        setThumbnails((prev) => ({ ...prev, ...map }));
+      }
+    });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isPhotosEnabled, products]);
+
+  const handleRequestThumbnails = useCallback((productIds: string[]) => {
+    productImagesRepo.listThumbnails(productIds).then((map) => {
+      setThumbnails((prev) => ({ ...prev, ...map }));
+    });
   }, []);
 
   // Autofocus search on mount
@@ -160,26 +211,44 @@ export const CashierPage: React.FC = () => {
         className="w-full lg:w-[62%] flex flex-col h-full border-r border-[var(--border)] overflow-hidden"
         aria-label="Katalog produk"
       >
-        {/* Search Bar with F2 Shortcut Hint */}
+        {/* Search Bar with F2 Shortcut Hint and View Mode Switcher */}
         <div className="p-4 bg-[var(--surface)] border-b border-[var(--border)]">
-          <div className="relative flex items-center">
-            <Search className="w-5 h-5 absolute left-3.5 text-[var(--text-muted)] pointer-events-none" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setFeedbackMessage(null);
-              }}
-              onKeyDown={handleSearchKeyDown}
-              placeholder={t("cashier.searchPlaceholder")}
-              aria-label={t("cashier.searchPlaceholder")}
-              className="w-full h-12 pl-11 pr-14 bg-[var(--surface)] text-base text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 transition-colors placeholder:text-[var(--text-muted)]"
-            />
-            <kbd className="absolute right-3.5 px-2 py-0.5 text-xs font-mono rounded border border-[var(--border-strong)] bg-[var(--bg)] text-[var(--text-muted)] select-none">
-              {t("cashier.f2Hint")}
-            </kbd>
+          <div className="flex items-center gap-2">
+            <div className="relative flex-1 flex items-center">
+              <Search className="w-5 h-5 absolute left-3.5 text-[var(--text-muted)] pointer-events-none" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value);
+                  setFeedbackMessage(null);
+                }}
+                onKeyDown={handleSearchKeyDown}
+                placeholder={t("cashier.searchPlaceholder")}
+                aria-label={t("cashier.searchPlaceholder")}
+                className="w-full h-12 pl-11 pr-14 bg-[var(--surface)] text-base text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus:outline-none focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 transition-colors placeholder:text-[var(--text-muted)]"
+              />
+              <kbd className="absolute right-3.5 px-2 py-0.5 text-xs font-mono rounded border border-[var(--border-strong)] bg-[var(--bg)] text-[var(--text-muted)] select-none">
+                {t("cashier.f2Hint")}
+              </kbd>
+            </div>
+
+            {isPhotosEnabled && (
+              <button
+                type="button"
+                onClick={handleToggleViewMode}
+                title={t("cashier.toggleViewMode")}
+                aria-label={t("cashier.toggleViewMode")}
+                className="w-12 h-12 min-w-12 min-h-12 flex items-center justify-center rounded-[var(--radius-control)] border border-[var(--border-strong)] bg-[var(--surface)] hover:bg-[var(--bg)] text-[var(--text)] transition-colors focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-2 shrink-0 cursor-pointer"
+              >
+                {effectiveViewMode === "photo" ? (
+                  <LayoutGrid className="w-5 h-5 text-[var(--primary)]" />
+                ) : (
+                  <List className="w-5 h-5 text-[var(--text-muted)]" />
+                )}
+              </button>
+            )}
           </div>
 
           {/* Feedback / Error message from barcode scanner */}
@@ -198,43 +267,40 @@ export const CashierPage: React.FC = () => {
           />
           {categories.map((cat) => {
             const count = products.filter((p) => p.categoryId === cat.id).length;
+            const hasProducts = count > 0;
             return (
               <Chip
                 key={cat.id}
-                label={cat.name}
+                label={toSentenceCase(cat.name)}
                 count={count}
                 isSelected={selectedCategoryId === cat.id}
-                onClick={() => setSelectedCategoryId(cat.id)}
+                disabled={!hasProducts}
+                onClick={hasProducts ? () => setSelectedCategoryId(cat.id) : undefined}
               />
             );
           })}
         </div>
 
-        {/* Product Grid (3 columns on tablet landscape) */}
-        <div className="flex-1 overflow-y-auto p-4">
-          {products.length === 0 ? (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-6 text-[var(--text-muted)]">
-              <p className="font-medium text-base text-[var(--text)]">
-                {t("cashier.emptyCatalog")}
-              </p>
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-6 text-[var(--text-muted)]">
-              <p className="font-medium text-base text-[var(--text)]">{t("cashier.emptyFilter")}</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-              {filteredProducts.map((product) => (
-                <ProductTile
-                  key={product.id}
-                  product={product}
-                  cartQty={getItemQty(product.id)}
-                  onSelect={(p) => addItem(p)}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Product Catalog / Grid */}
+        {products.length === 0 ? (
+          <div className="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center text-center p-6 text-[var(--text-muted)]">
+            <p className="font-medium text-base text-[var(--text)]">{t("cashier.emptyCatalog")}</p>
+          </div>
+        ) : filteredProducts.length === 0 ? (
+          <div className="flex-1 overflow-y-auto p-4 flex flex-col items-center justify-center text-center p-6 text-[var(--text-muted)]">
+            <p className="font-medium text-base text-[var(--text)]">{t("cashier.emptyFilter")}</p>
+          </div>
+        ) : (
+          <VirtualizedProductGrid
+            products={filteredProducts}
+            categories={categories}
+            thumbnails={thumbnails}
+            viewMode={effectiveViewMode}
+            getItemQty={getItemQty}
+            onSelect={(p) => addItem(p)}
+            onRequestThumbnails={handleRequestThumbnails}
+          />
+        )}
 
         {/* Mobile / Tablet Portrait Sticky Bottom Bar */}
         <div

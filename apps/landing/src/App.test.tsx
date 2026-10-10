@@ -74,7 +74,9 @@ describe("Landing Page — Full Desktop Experience", () => {
   it("renders Steps section and Download section panel", () => {
     render(<App />);
 
-    expect(screen.getByRole("heading", { name: "Get started in three steps." })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "Get started in three steps." })
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Download Kasir Terbuka" })).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /^Download for (Windows|Linux|macOS|Android)$/ })
@@ -138,7 +140,9 @@ describe("Landing Page — Full Desktop Experience", () => {
     // Click second question to expand it
     fireEvent.click(screen.getByText(q2));
     expect(
-      screen.getByText(/All store data, product lists, and transaction history are stored directly/i)
+      screen.getByText(
+        /All store data, product lists, and transaction history are stored directly/i
+      )
     ).toBeInTheDocument();
 
     // Click fourth question to confirm honesty about non-sync limitation

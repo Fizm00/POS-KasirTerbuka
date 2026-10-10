@@ -9,8 +9,8 @@ export function LocalFirstSection() {
               Your data stays on your device.
             </h2>
             <p className="text-[#5F5E58] text-base sm:text-lg leading-relaxed max-w-[500px]">
-              The app never sends your sales records to any remote server. Even without internet, your
-              cash register keeps working. Because data lives only on your device, back up
+              The app never sends your sales records to any remote server. Even without internet,
+              your cash register keeps working. Because data lives only on your device, back up
               regularly.
             </p>
           </div>

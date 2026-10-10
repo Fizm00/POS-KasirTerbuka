@@ -5,4 +5,7 @@ export * from "./productsRepo";
 export * from "./transactionsRepo";
 export * from "./reportsRepo";
 export * from "./backupRepo";
+export * from "./productImagesRepo";
+export * from "./productImportRepo";
+export * from "./stockMovementsRepo";
 export * from "./seed";

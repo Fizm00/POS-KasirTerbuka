@@ -7,7 +7,14 @@ import { settingsRepo } from "../../db/repositories/settingsRepo";
 import { backupRepo, type BackupFile } from "../../db/repositories/backupRepo";
 import { transactionsRepo } from "../../db/repositories/transactionsRepo";
 import { usersRepo } from "../../db/repositories/usersRepo";
-import type { PaperWidth, StoreSettings } from "../../db/schema";
+import type {
+  FeatureFlags,
+  FeatureKey,
+  PaperWidth,
+  ProductViewMode,
+  StoreSettings,
+} from "../../db/schema";
+import { DEFAULT_FEATURES, FEATURE_DEFINITIONS } from "../../lib/features";
 import { useAuthStore } from "../auth/authStore";
 import { formatJakartaDisplayDateTime } from "../../lib/dates";
 import { downloadCsvFile, generateTransactionsCsv } from "../../lib/csv";
@@ -34,7 +41,12 @@ export const SettingsPage: React.FC = () => {
   const [platformType, setPlatformType] = useState<"desktop" | "mobile" | "pwa" | "browser">(() => {
     if (isTauri()) return "desktop";
     if (isCapacitor() || isAndroid()) return "mobile";
-    if (isPwa() || (typeof window !== "undefined" && Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))) return "pwa";
+    if (
+      isPwa() ||
+      (typeof window !== "undefined" &&
+        Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))
+    )
+      return "pwa";
     return "browser";
   });
 
@@ -44,7 +56,11 @@ export const SettingsPage: React.FC = () => {
         setPlatformType("desktop");
       } else if (isCapacitor() || isAndroid()) {
         setPlatformType("mobile");
-      } else if (isPwa() || (typeof window !== "undefined" && Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))) {
+      } else if (
+        isPwa() ||
+        (typeof window !== "undefined" &&
+          Boolean(window.matchMedia?.("(display-mode: standalone)")?.matches))
+      ) {
         setPlatformType("pwa");
       } else {
         setPlatformType("browser");
@@ -80,6 +96,10 @@ export const SettingsPage: React.FC = () => {
   const [phone, setPhone] = useState("");
   const [receiptFooter, setReceiptFooter] = useState("");
   const [paperWidth, setPaperWidth] = useState<PaperWidth>(58);
+
+  // Fitur & Tampilan Produk state
+  const [productView, setProductView] = useState<ProductViewMode>("compact");
+  const [features, setFeatures] = useState<FeatureFlags>(DEFAULT_FEATURES);
 
   // Printer state
   const [printerConnection, setPrinterConnection] = useState<PrinterDriverId>(() =>
@@ -147,6 +167,8 @@ export const SettingsPage: React.FC = () => {
         setPhone(s.phone);
         setReceiptFooter(s.receiptFooter);
         setPaperWidth(s.paperWidth);
+        setProductView(s.productView || "compact");
+        setFeatures(s.features || DEFAULT_FEATURES);
         const lockMins = s.autoLockMinutes || 5;
         setAutoLockMin(lockMins);
         setAutoLockMinutes(lockMins);
@@ -172,6 +194,37 @@ export const SettingsPage: React.FC = () => {
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  // Feature Toggle & Product View handlers
+  const handleToggleFeature = async (key: FeatureKey) => {
+    const updatedFeatures = {
+      ...features,
+      [key]: !features[key],
+    };
+    setFeatures(updatedFeatures);
+    try {
+      const updated = await settingsRepo.updateSettings({
+        features: updatedFeatures,
+      });
+      setSettings(updated);
+      showToast(t("settings.features.saved"));
+    } catch {
+      setErrorMessage("Gagal menyimpan perubahan fitur.");
+    }
+  };
+
+  const handleChangeProductView = async (val: ProductViewMode) => {
+    setProductView(val);
+    try {
+      const updated = await settingsRepo.updateSettings({
+        productView: val,
+      });
+      setSettings(updated);
+      showToast(t("settings.features.saved"));
+    } catch {
+      setErrorMessage("Gagal menyimpan perubahan tampilan produk.");
+    }
   };
 
   // Save Store Settings
@@ -340,30 +393,25 @@ export const SettingsPage: React.FC = () => {
     }
   };
 
-  // Handle File Input Select for Backup Import
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle File Input Select for Backup Import (JSON or ZIP)
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setErrorMessage(null);
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const content = event.target?.result as string;
-        const validated = backupRepo.validateBackup(content);
-        setPendingBackup(validated);
-        setIsConfirmModalOpen(true);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setErrorMessage(err.message);
-        } else {
-          setErrorMessage(t("settings.backup.invalidFile"));
-        }
-      } finally {
-        if (fileInputRef.current) fileInputRef.current.value = "";
+    try {
+      const validated = await backupRepo.validateBackup(file);
+      setPendingBackup(validated);
+      setIsConfirmModalOpen(true);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage(t("settings.backup.invalidFile"));
       }
-    };
-    reader.readAsText(file);
+    } finally {
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
   };
 
   // Execute Atomic Backup Restore
@@ -527,6 +575,76 @@ export const SettingsPage: React.FC = () => {
             {t("settings.store.save")}
           </Button>
         </form>
+      </section>
+
+      {/* SECTION: FITUR TAMBAHAN */}
+      <section className="space-y-6 pb-8 border-b border-[var(--border)]">
+        <div>
+          <h2 className="text-lg font-semibold text-[var(--text)]">
+            {t("settings.features.title")}
+          </h2>
+          <p className="text-sm text-[var(--text-muted)] mt-1">{t("settings.features.subtitle")}</p>
+        </div>
+
+        {/* Info Note: Turning off hides but never deletes data */}
+        <div className="p-4 bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-control)] max-w-2xl">
+          <p className="text-sm text-[var(--text-muted)] leading-relaxed">
+            {t("settings.features.notice")}
+          </p>
+        </div>
+
+        {/* Product view switcher */}
+        <div className="space-y-2 max-w-sm">
+          <label className="block text-sm font-medium text-[var(--text)]">
+            {t("settings.features.productViewTitle")}
+          </label>
+          <SegmentedControl
+            options={[
+              { value: "compact", label: t("settings.features.viewCompact") },
+              { value: "photo", label: t("settings.features.viewPhoto") },
+            ]}
+            value={productView}
+            onChange={(val) => handleChangeProductView(val as ProductViewMode)}
+          />
+        </div>
+
+        {/* Modular Feature Switches List */}
+        <div className="divide-y divide-[var(--border)] max-w-2xl">
+          {FEATURE_DEFINITIONS.map((def) => {
+            const isEnabled = Boolean(features[def.key]);
+            return (
+              <div key={def.key} className="py-4 flex items-start justify-between gap-4">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-base font-medium text-[var(--text)]">
+                    {t(def.labelKey)}
+                  </span>
+                  <span className="text-sm text-[var(--text-muted)] leading-relaxed">
+                    {t(def.descriptionKey)}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  role="switch"
+                  id={`feature-switch-${def.key}`}
+                  aria-checked={isEnabled}
+                  aria-label={t(def.labelKey)}
+                  onClick={() => handleToggleFeature(def.key)}
+                  className={`relative shrink-0 w-12 h-7 flex items-center rounded-full p-1 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-2 ${
+                    isEnabled ? "bg-[var(--primary)]" : "bg-[var(--border-strong)]"
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={`inline-block w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                      isEnabled ? "translate-x-5" : "translate-x-0"
+                    }`}
+                  />
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </section>
 
       {/* SECTION 2: PRINTER */}
@@ -723,7 +841,7 @@ export const SettingsPage: React.FC = () => {
           <input
             ref={fileInputRef}
             type="file"
-            accept=".json"
+            accept=".json,.zip"
             aria-label={t("settings.backup.importJson")}
             onChange={handleFileChange}
             className="hidden"
@@ -777,9 +895,7 @@ export const SettingsPage: React.FC = () => {
       <section className="space-y-4 pb-8">
         <div>
           <h2 className="text-lg font-semibold text-[var(--text)]">{t("settings.app.title")}</h2>
-          <p className="text-sm font-medium text-[var(--text)] mt-1">
-            {getAppStatus()}
-          </p>
+          <p className="text-sm font-medium text-[var(--text)] mt-1">{getAppStatus()}</p>
           <p className="text-xs text-[var(--text-muted)] mt-0.5">
             {isInstalledApp ? t("settings.app.nativeHint") : t("settings.app.installHint")}
           </p>

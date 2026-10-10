@@ -4,8 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Drawer, Input } from "../../components";
 import { productsRepo } from "../../db/repositories/productsRepo";
 import { categoriesRepo } from "../../db/repositories/categoriesRepo";
+import { productImagesRepo } from "../../db/repositories/productImagesRepo";
 import type { Category, Product } from "../../db/schema";
 import { productFormSchema, type ProductFormValues } from "./productSchema";
+import { ProductPhotoUpload } from "./ProductPhotoUpload";
+import { useFeatureEnabled } from "../../lib/features";
 import { t } from "../../i18n";
 
 export interface ProductDrawerProps {
@@ -25,6 +28,10 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
 }) => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [skuError, setSkuError] = useState<string>("");
+  const isPhotosEnabled = useFeatureEnabled("photos");
+  const [photoUrl, setPhotoUrl] = useState<string | null>(null);
+  const [selectedPhotoFile, setSelectedPhotoFile] = useState<File | null>(null);
+  const [shouldDeletePhoto, setShouldDeletePhoto] = useState<boolean>(false);
 
   const {
     register,
@@ -63,6 +70,13 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
           lowStockThreshold: productToEdit.lowStockThreshold,
           isActive: productToEdit.isActive,
         });
+
+        if (isPhotosEnabled) {
+          const url = await productImagesRepo.getProductImageUrl(productToEdit.id);
+          setPhotoUrl(url);
+        } else {
+          setPhotoUrl(null);
+        }
       } else {
         reset({
           name: "",
@@ -74,14 +88,17 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
           lowStockThreshold: 5,
           isActive: true,
         });
+        setPhotoUrl(null);
       }
+      setSelectedPhotoFile(null);
+      setShouldDeletePhoto(false);
       setSkuError("");
     }
 
     if (isOpen) {
       loadData();
     }
-  }, [isOpen, productToEdit, reset]);
+  }, [isOpen, productToEdit, reset, isPhotosEnabled]);
 
   const onSubmit = async (values: ProductFormValues) => {
     setSkuError("");
@@ -104,8 +121,16 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
         lowStockThreshold: values.lowStockThreshold,
         isActive: values.isActive,
       });
+
+      if (isPhotosEnabled) {
+        if (selectedPhotoFile) {
+          await productImagesRepo.setProductImage(productToEdit.id, selectedPhotoFile);
+        } else if (shouldDeletePhoto) {
+          await productImagesRepo.removeProductImage(productToEdit.id);
+        }
+      }
     } else {
-      await productsRepo.create({
+      const created = await productsRepo.create({
         name: values.name.trim(),
         sku: values.sku.trim(),
         categoryId: values.categoryId,
@@ -115,6 +140,10 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
         lowStockThreshold: values.lowStockThreshold,
         isActive: values.isActive,
       });
+
+      if (isPhotosEnabled && selectedPhotoFile) {
+        await productImagesRepo.setProductImage(created.id, selectedPhotoFile);
+      }
     }
 
     onSaved();
@@ -140,6 +169,17 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({
       }
     >
       <form id="product-form" onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        {isPhotosEnabled && (
+          <ProductPhotoUpload
+            initialImageUrl={photoUrl}
+            onChange={(file, shouldDelete) => {
+              setSelectedPhotoFile(file);
+              setShouldDeletePhoto(shouldDelete);
+            }}
+            disabled={isSubmitting}
+          />
+        )}
+
         {/* Nama produk */}
         <Input
           label={t("products.form.nameLabel")}

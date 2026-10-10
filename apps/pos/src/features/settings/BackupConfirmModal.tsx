@@ -30,6 +30,7 @@ export const BackupConfirmModal: React.FC<BackupConfirmModalProps> = ({
     transactions: backupFile.data.transactions.length,
     users: backupFile.data.users.length,
     categories: backupFile.data.categories.length,
+    images: "images" in backupFile && backupFile.images ? backupFile.images.length : 0,
   };
 
   return (
@@ -77,6 +78,7 @@ export const BackupConfirmModal: React.FC<BackupConfirmModalProps> = ({
             </li>
             <li>{t("settings.backup.usersCount", { count: summary.users })}</li>
             <li>{t("settings.backup.categoriesCount", { count: summary.categories })}</li>
+            {summary.images > 0 && <li>{summary.images} foto produk</li>}
           </ul>
           <p className="text-xs text-[var(--text-muted)] pt-1 border-t border-[var(--border)]">
             Toko: <strong>{summary.storeName}</strong> • Tanggal ekspor: {summary.exportedAt}

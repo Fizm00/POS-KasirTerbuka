@@ -92,8 +92,8 @@ export function FeaturesSection() {
               Roles & PIN lock
             </h2>
             <p className="text-[#5F5E58] text-base sm:text-lg leading-relaxed">
-              Protect store records with local access permissions. Cashiers focus on ringing up customers,
-              while voiding transactions and editing products require an admin PIN.
+              Protect store records with local access permissions. Cashiers focus on ringing up
+              customers, while voiding transactions and editing products require an admin PIN.
             </p>
             <ul className="space-y-2 pt-2 text-sm text-[#1A1A18]">
               <li className="pb-2 border-b border-[#E6E3DA]/80">

@@ -13,7 +13,7 @@ describe("SetupWizard", () => {
     useAuthStore.getState().lock();
   });
 
-  it("walks through 3 steps, validates input, and completes setup", async () => {
+  it("walks through 4 steps with business preset, validates input, and completes setup", async () => {
     // Mock navigator.storage.persist
     const persistMock = vi.fn().mockResolvedValue(true);
     Object.defineProperty(globalThis.navigator, "storage", {
@@ -27,8 +27,17 @@ describe("SetupWizard", () => {
       </MemoryRouter>
     );
 
-    // Step 1: Store data
-    expect(screen.getByText(/Langkah 1 dari 3/i)).toBeInTheDocument();
+    // Step 1: Business preset selection
+    expect(screen.getByText(/Langkah 1 dari 4/i)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /Jenis usaha/i })).toBeInTheDocument();
+    expect(screen.getByText(/Kafe \/ Warung makan/i)).toBeInTheDocument();
+
+    // Select Cafe preset
+    await userEvent.click(screen.getByRole("radio", { name: /Kafe \/ Warung makan/i }));
+    await userEvent.click(screen.getByRole("button", { name: /Lanjut/i }));
+
+    // Step 2: Store data
+    expect(screen.getByText(/Langkah 2 dari 4/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Nama toko/i)).toBeInTheDocument();
 
     // Click next without store name -> error
@@ -36,13 +45,13 @@ describe("SetupWizard", () => {
     expect(screen.getByRole("alert")).toHaveTextContent(/Nama toko wajib diisi/i);
 
     // Fill store info
-    await userEvent.type(screen.getByLabelText(/Nama toko/i), "Toko Makmur");
+    await userEvent.type(screen.getByLabelText(/Nama toko/i), "Kopi Senja");
     await userEvent.type(screen.getByLabelText(/Alamat/i), "Jl. Pemuda No. 1");
     await userEvent.type(screen.getByLabelText(/Nomor telepon/i), "0812345678");
     await userEvent.click(screen.getByRole("button", { name: /Lanjut/i }));
 
-    // Step 2: Admin account
-    expect(screen.getByText(/Langkah 2 dari 3/i)).toBeInTheDocument();
+    // Step 3: Admin account
+    expect(screen.getByText(/Langkah 3 dari 4/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Nama admin/i)).toBeInTheDocument();
 
     // Fill invalid PIN -> error
@@ -65,8 +74,8 @@ describe("SetupWizard", () => {
     await userEvent.type(screen.getByLabelText(/Ulangi PIN/i), "1234");
     await userEvent.click(screen.getByRole("button", { name: /Lanjut/i }));
 
-    // Step 3: Finish
-    expect(screen.getByText(/Langkah 3 dari 3/i)).toBeInTheDocument();
+    // Step 4: Finish
+    expect(screen.getByText(/Langkah 4 dari 4/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Semua data toko, produk, dan transaksi disimpan langsung/i)
     ).toBeInTheDocument();
@@ -90,10 +99,18 @@ describe("SetupWizard", () => {
     });
 
     const settings = await db.settings.get("default");
-    expect(settings?.storeName).toBe("Toko Makmur");
+    expect(settings?.storeName).toBe("Kopi Senja");
+    expect(settings?.businessType).toBe("cafe");
+    expect(settings?.productView).toBe("photo");
+    expect(settings?.features?.photos).toBe(true);
+    expect(settings?.features?.shifts).toBe(true);
+    expect(settings?.features?.tables).toBe(true);
+    expect(settings?.features?.variants).toBe(true);
+    expect(settings?.features?.holdOrders).toBe(true);
+    expect(settings?.features?.stockIn).toBe(false);
 
     // Verify auth store is unlocked
     expect(useAuthStore.getState().isLocked).toBe(false);
     expect(useAuthStore.getState().currentUser?.name).toBe("Pak Budi");
-  });
+  }, 15000);
 });

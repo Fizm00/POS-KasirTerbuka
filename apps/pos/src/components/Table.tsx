@@ -1,11 +1,15 @@
 import React from "react";
+import { ArrowDown, ArrowUp, ArrowUpDown } from "lucide-react";
 import { Button } from "./Button";
 import { t } from "../i18n";
+
+export type SortDirection = "asc" | "desc" | null;
 
 export interface Column<T> {
   key: string;
   header: string;
   isNumeric?: boolean;
+  sortable?: boolean;
   render?: (row: T, index: number) => React.ReactNode;
 }
 
@@ -22,6 +26,9 @@ export interface TableProps<T> {
   currentPage?: number;
   totalPages?: number;
   onPageChange?: (page: number) => void;
+  sortColumn?: string;
+  sortDirection?: SortDirection;
+  onSort?: (key: string) => void;
 }
 
 export function Table<T>({
@@ -35,6 +42,9 @@ export function Table<T>({
   currentPage,
   totalPages,
   onPageChange,
+  sortColumn,
+  sortDirection,
+  onSort,
 }: TableProps<T>) {
   if (data.length === 0) {
     return (
@@ -55,17 +65,58 @@ export function Table<T>({
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="border-b border-[var(--border)] bg-[var(--bg)]">
-              {columns.map((col) => (
-                <th
-                  key={col.key}
-                  scope="col"
-                  className={`px-4 py-3.5 text-[15px] font-semibold text-[var(--text-muted)] select-none ${
-                    col.isNumeric ? "text-right" : "text-left"
-                  }`}
-                >
-                  {col.header}
-                </th>
-              ))}
+              {columns.map((col) => {
+                const isSorted = sortColumn === col.key;
+                const currentDir = isSorted ? sortDirection : null;
+                const ariaSort =
+                  currentDir === "asc"
+                    ? "ascending"
+                    : currentDir === "desc"
+                      ? "descending"
+                      : "none";
+
+                return (
+                  <th
+                    key={col.key}
+                    scope="col"
+                    aria-sort={col.sortable ? ariaSort : undefined}
+                    className={`px-4 py-3.5 text-[15px] font-semibold text-[var(--text-muted)] select-none ${
+                      col.isNumeric ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {col.sortable && onSort ? (
+                      <button
+                        type="button"
+                        onClick={() => onSort(col.key)}
+                        aria-label={`Urutkan ${col.header}`}
+                        className={`inline-flex items-center gap-1.5 cursor-pointer rounded focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-2 ${
+                          col.isNumeric ? "ml-auto flex-row-reverse" : ""
+                        } ${isSorted ? "text-[var(--text)] font-semibold" : "hover:text-[var(--text)]"}`}
+                      >
+                        <span>{col.header}</span>
+                        {currentDir === "asc" ? (
+                          <ArrowUp
+                            className="w-4 h-4 text-[var(--primary)] shrink-0"
+                            aria-hidden="true"
+                          />
+                        ) : currentDir === "desc" ? (
+                          <ArrowDown
+                            className="w-4 h-4 text-[var(--primary)] shrink-0"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <ArrowUpDown
+                            className="w-4 h-4 text-[var(--text-muted)] opacity-60 shrink-0"
+                            aria-hidden="true"
+                          />
+                        )}
+                      </button>
+                    ) : (
+                      col.header
+                    )}
+                  </th>
+                );
+              })}
             </tr>
           </thead>
           <tbody className="divide-y divide-[var(--border)]">

@@ -57,7 +57,7 @@ export function jakartaDateToIsoRange(
   };
 }
 
-export type DatePreset = "today" | "7days" | "month" | "custom";
+export type DatePreset = "today" | "yesterday" | "7days" | "month" | "custom";
 
 export interface PresetRangeResult {
   startDateStr: string; // YYYY-MM-DD
@@ -70,16 +70,23 @@ export interface PresetRangeResult {
  * Computes start and end boundaries for predefined presets in Asia/Jakarta timezone.
  */
 export function getPresetDateRange(
-  preset: "today" | "7days" | "month",
+  preset: "today" | "yesterday" | "7days" | "month",
   referenceDate: Date = new Date()
 ): PresetRangeResult {
   const nowParts = getJakartaDateParts(referenceDate);
   const endStr = nowParts.dateString;
 
   let startStr = endStr;
+  let customEndStr = endStr;
 
   if (preset === "today") {
     startStr = endStr;
+  } else if (preset === "yesterday") {
+    const anchor = new Date(`${nowParts.dateString}T12:00:00+07:00`);
+    anchor.setDate(anchor.getDate() - 1);
+    const yesterdayStr = getJakartaDateString(anchor);
+    startStr = yesterdayStr;
+    customEndStr = yesterdayStr;
   } else if (preset === "7days") {
     // 7 days inclusive: today minus 6 days
     // Construct Jakarta noon to safely shift days without boundary ambiguity
@@ -91,11 +98,11 @@ export function getPresetDateRange(
     startStr = `${nowParts.year}-${monthPadded}-01`;
   }
 
-  const { startDateIso, endDateIso } = jakartaDateToIsoRange(startStr, endStr);
+  const { startDateIso, endDateIso } = jakartaDateToIsoRange(startStr, customEndStr);
 
   return {
     startDateStr: startStr,
-    endDateStr: endStr,
+    endDateStr: customEndStr,
     startDateIso,
     endDateIso,
   };

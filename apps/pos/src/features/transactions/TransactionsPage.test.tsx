@@ -321,4 +321,58 @@ describe("TransactionsPage & Void Flow", () => {
       })
     ).rejects.toThrow(/Unauthorized: Only admins can void transactions/i);
   });
+
+  it("displays summary line with filtered transaction count and total amount", async () => {
+    useAuthStore.getState().unlock(adminUser);
+
+    render(
+      <MemoryRouter>
+        <TransactionsPage />
+      </MemoryRouter>
+    );
+
+    // Initial state: 2 transactions (40.000 + 20.000 = 60.000)
+    await waitFor(() => {
+      expect(screen.getByText(/2 transaksi · Total Rp 60\.000/i)).toBeInTheDocument();
+    });
+
+    // Filter by cashier Doni (user-kasir-2, only 1 transaction = 20.000)
+    const cashierSelect = screen.getByLabelText(/^Kasir$/i);
+    await userEvent.selectOptions(cashierSelect, "user-kasir-2");
+
+    await waitFor(() => {
+      expect(screen.getByText(/1 transaksi · Total Rp 20\.000/i)).toBeInTheDocument();
+    });
+  });
+
+  it("sorts transactions by total when column header is clicked", async () => {
+    useAuthStore.getState().unlock(adminUser);
+
+    render(
+      <MemoryRouter>
+        <TransactionsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("INV-20261009-0001")).toBeInTheDocument();
+    });
+
+    const sortTotalBtn = screen.getByRole("button", { name: /Urutkan Total/i });
+
+    // Click to sort ascending (20.000 first, then 40.000)
+    await userEvent.click(sortTotalBtn);
+
+    const rowsAsc = screen.getAllByRole("row");
+    // Row 1 header, Row 2 INV-0002 (20.000), Row 3 INV-0001 (40.000)
+    expect(within(rowsAsc[1]).getByText("INV-20261009-0002")).toBeInTheDocument();
+    expect(within(rowsAsc[2]).getByText("INV-20261009-0001")).toBeInTheDocument();
+
+    // Click to sort descending (40.000 first, then 20.000)
+    await userEvent.click(sortTotalBtn);
+
+    const rowsDesc = screen.getAllByRole("row");
+    expect(within(rowsDesc[1]).getByText("INV-20261009-0001")).toBeInTheDocument();
+    expect(within(rowsDesc[2]).getByText("INV-20261009-0002")).toBeInTheDocument();
+  });
 });

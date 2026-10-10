@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Lock } from "lucide-react";
+import { Lock, MoreHorizontal } from "lucide-react";
 import { settingsRepo } from "../db/repositories/settingsRepo";
 import type { StoreSettings } from "../db/schema";
 import { useAuthStore } from "../features/auth/authStore";
 import { getNavigationItems } from "../features/auth/permissions";
 import { useAutoLock } from "../features/auth/useAutoLock";
+import { MobileNavSheet } from "./MobileNavSheet";
 import { t } from "../i18n";
 
 export interface AppShellProps {
@@ -19,6 +20,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
   const [settings, setSettings] = useState<StoreSettings | null>(null);
   const [isBackupDue, setIsBackupDue] = useState(false);
+  const [isMobileSheetOpen, setIsMobileSheetOpen] = useState(false);
 
   // Activate auto-lock on inactivity
   useAutoLock();
@@ -40,7 +42,14 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     navigate("/kunci", { replace: true });
   };
 
-  const navItems = currentUser ? getNavigationItems(currentUser.role) : [];
+  const navItems = currentUser ? getNavigationItems(currentUser.role, settings) : [];
+  const maxPrimaryItems = 3;
+  const hasOverflow = navItems.length > 4;
+  const primaryMobileItems = hasOverflow
+    ? navItems.slice(0, maxPrimaryItems)
+    : navItems.slice(0, 4);
+  const overflowItems = hasOverflow ? navItems.slice(maxPrimaryItems) : [];
+  const isOverflowActive = overflowItems.some((item) => location.pathname === item.path);
 
   return (
     <div
@@ -124,7 +133,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         }}
         aria-label="Menu bawah ponsel"
       >
-        {navItems.slice(0, 4).map((item) => {
+        {primaryMobileItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link
@@ -140,7 +149,35 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             </Link>
           );
         })}
+
+        {/* 4th item: "Lainnya" sheet trigger when overflow exists */}
+        {hasOverflow && (
+          <button
+            type="button"
+            onClick={() => setIsMobileSheetOpen(true)}
+            aria-expanded={isMobileSheetOpen}
+            aria-label={t("nav.moreMenu")}
+            className={`min-h-[48px] px-2 flex-1 inline-flex items-center justify-center gap-1 text-sm font-medium rounded-[var(--radius-control)] cursor-pointer ${
+              isOverflowActive || isMobileSheetOpen
+                ? "text-[var(--primary)] font-semibold"
+                : "text-[var(--text-muted)] hover:text-[var(--text)]"
+            } focus-visible:outline-2 focus-visible:outline-[var(--primary)] focus-visible:outline-offset-2`}
+          >
+            <MoreHorizontal className="w-4 h-4 shrink-0" aria-hidden="true" />
+            <span>{t("nav.more")}</span>
+          </button>
+        )}
       </nav>
+
+      {/* Overflow Sheet for Mobile */}
+      {hasOverflow && (
+        <MobileNavSheet
+          isOpen={isMobileSheetOpen}
+          onClose={() => setIsMobileSheetOpen(false)}
+          items={overflowItems}
+          onLock={handleLock}
+        />
+      )}
     </div>
   );
 };

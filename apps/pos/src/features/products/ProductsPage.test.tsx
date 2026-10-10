@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { ProductsPage } from "./ProductsPage";
@@ -207,5 +207,93 @@ describe("ProductsPage (Admin)", () => {
     await waitFor(() => {
       expect(screen.queryByRole("button", { name: /Hapus Snack Baru/i })).not.toBeInTheDocument();
     });
+  });
+
+  it("shows low stock count badge in the filter toggle button", async () => {
+    render(
+      <MemoryRouter>
+        <ProductsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Kopi Susu")).toBeInTheDocument();
+    });
+
+    // 1 product has low stock (Kopi Susu has stock 2 <= threshold 5; Nasi Goreng has 20 > 5)
+    const toggleBtn = screen.getByRole("button", { name: /Stok menipis/i });
+    expect(within(toggleBtn).getByText("1")).toBeInTheDocument();
+  });
+
+  it("sorts products by price and stock when headers are clicked", async () => {
+    render(
+      <MemoryRouter>
+        <ProductsPage />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("Kopi Susu")).toBeInTheDocument();
+      expect(screen.getByText("Nasi Goreng")).toBeInTheDocument();
+    });
+
+    const sortPriceBtn = screen.getByRole("button", { name: /Urutkan Harga jual/i });
+
+    // Click 1: Ascending price (15.000 first, then 22.000)
+    await userEvent.click(sortPriceBtn);
+    let rows = screen.getAllByRole("row");
+    expect(within(rows[1]).getByText("Kopi Susu")).toBeInTheDocument();
+    expect(within(rows[2]).getByText("Nasi Goreng")).toBeInTheDocument();
+
+    // Click 2: Descending price (22.000 first, then 15.000)
+    await userEvent.click(sortPriceBtn);
+    rows = screen.getAllByRole("row");
+    expect(within(rows[1]).getByText("Nasi Goreng")).toBeInTheDocument();
+    expect(within(rows[2]).getByText("Kopi Susu")).toBeInTheDocument();
+
+    // Click 3: Reset to default order
+    await userEvent.click(sortPriceBtn);
+    rows = screen.getAllByRole("row");
+    expect(within(rows[1]).getByText("Kopi Susu")).toBeInTheDocument();
+  });
+
+  it("renders 'Stok' row action and 'Barang masuk' button when stockIn is enabled", async () => {
+    const { useSettingsStore, DEFAULT_FEATURES } = await import("../../lib/features");
+    useSettingsStore.setState({
+      settings: {
+        id: "default",
+        storeName: "Toko Test",
+        address: "Jl Test",
+        phone: "123",
+        receiptFooter: "Terima kasih",
+        paperWidth: 58,
+        currency: "IDR",
+        features: {
+          ...DEFAULT_FEATURES,
+          stockIn: true,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <ProductsPage />
+      </MemoryRouter>
+    );
+
+    // Verify "Barang masuk" button in header
+    expect(screen.getByRole("button", { name: /Barang masuk/i })).toBeInTheDocument();
+
+    // Verify "Stok" button in row actions
+    const stockButtons = await screen.findAllByRole("button", { name: "Stok" });
+    expect(stockButtons.length).toBeGreaterThan(0);
+
+    // Clicking "Stok" opens ProductStockDrawer
+    await userEvent.click(stockButtons[0]);
+    expect(screen.getByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText(/Kelola stok/i)).toBeInTheDocument();
+
+    // Reset store
+    useSettingsStore.setState({ settings: null });
   });
 });

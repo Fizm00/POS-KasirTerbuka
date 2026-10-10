@@ -1,4 +1,5 @@
 import { db, PosDatabase, type StoreSettings } from "../schema";
+import { DEFAULT_FEATURES, useSettingsStore } from "../../lib/features";
 
 const DEFAULT_SETTINGS_ID = "default";
 
@@ -11,6 +12,9 @@ export const defaultSettings: StoreSettings = {
   paperWidth: 58,
   currency: "IDR",
   autoLockMinutes: 5,
+  businessType: "custom",
+  productView: "compact",
+  features: { ...DEFAULT_FEATURES },
 };
 
 export const settingsRepo = {
@@ -18,8 +22,10 @@ export const settingsRepo = {
     const existing = await database.settings.get(DEFAULT_SETTINGS_ID);
     if (!existing) {
       await database.settings.put(defaultSettings);
+      useSettingsStore.getState().setSettings(defaultSettings);
       return defaultSettings;
     }
+    useSettingsStore.getState().setSettings(existing);
     return existing;
   },
 
@@ -34,6 +40,7 @@ export const settingsRepo = {
       id: DEFAULT_SETTINGS_ID,
     };
     await database.settings.put(updated);
+    useSettingsStore.getState().setSettings(updated);
     return updated;
   },
 };

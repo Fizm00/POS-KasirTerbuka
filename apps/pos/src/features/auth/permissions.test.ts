@@ -66,4 +66,62 @@ describe("role permissions", () => {
       expect(items.map((i) => i.id)).toEqual(["cashier", "history"]);
     });
   });
+
+  describe("feature-gated routes", () => {
+    it("denies access to a feature route when the feature is disabled, even for admin", () => {
+      const disabledSettings = {
+        id: "default",
+        storeName: "Test",
+        address: "",
+        phone: "",
+        receiptFooter: "",
+        paperWidth: 58 as const,
+        currency: "IDR",
+        features: {
+          stockIn: false,
+          shifts: false,
+          expenses: false,
+          tables: false,
+          receivables: false,
+          photos: false,
+          csvImport: false,
+          holdOrders: false,
+          variants: false,
+          tax: false,
+          serviceCharge: false,
+        },
+      };
+
+      expect(canAccessRoute("admin", "/stok-masuk", disabledSettings)).toBe(false);
+      expect(canAccessRoute("admin", "/shift", disabledSettings)).toBe(false);
+    });
+
+    it("allows access to a feature route when the feature is enabled for admin", () => {
+      const enabledSettings = {
+        id: "default",
+        storeName: "Test",
+        address: "",
+        phone: "",
+        receiptFooter: "",
+        paperWidth: 58 as const,
+        currency: "IDR",
+        features: {
+          stockIn: true,
+          shifts: true,
+          expenses: false,
+          tables: false,
+          receivables: false,
+          photos: false,
+          csvImport: false,
+          holdOrders: false,
+          variants: false,
+          tax: false,
+          serviceCharge: false,
+        },
+      };
+
+      expect(canAccessRoute("admin", "/stok-masuk", enabledSettings)).toBe(true);
+      expect(canAccessRoute("admin", "/shift", enabledSettings)).toBe(true);
+    });
+  });
 });

@@ -1,6 +1,6 @@
 [package]
 name = "kasir-terbuka"
-version = "1.0.0"
+version = "1.1.0"
 description = "Kasir Terbuka - Local-First POS"
 authors = ["Kasir Terbuka Contributors"]
 license = "AGPL-3.0"

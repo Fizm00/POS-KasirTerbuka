@@ -5,6 +5,8 @@ import { settingsRepo } from "../../db/repositories/settingsRepo";
 import { usersRepo } from "../../db/repositories/usersRepo";
 import { hashPin } from "../auth/pin";
 import { useAuthStore } from "../auth/authStore";
+import type { BusinessType } from "../../db/schema";
+import { BUSINESS_PRESETS } from "../../lib/features";
 import { t } from "../../i18n";
 
 export const SetupWizard: React.FC = () => {
@@ -13,13 +15,16 @@ export const SetupWizard: React.FC = () => {
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  // Step 1: Store info
+  // Step 1: Business preset
+  const [businessType, setBusinessType] = useState<BusinessType>("retail");
+
+  // Step 2: Store info
   const [storeName, setStoreName] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [storeError, setStoreError] = useState("");
 
-  // Step 2: Admin info
+  // Step 3: Admin info
   const [adminName, setAdminName] = useState("");
   const [pin, setPin] = useState("");
   const [pinConfirm, setPinConfirm] = useState("");
@@ -31,17 +36,21 @@ export const SetupWizard: React.FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleNextStep1 = (e: React.FormEvent) => {
+  const handleNextStep1 = () => {
+    setCurrentStep(2);
+  };
+
+  const handleNextStep2 = (e: React.FormEvent) => {
     e.preventDefault();
     if (!storeName.trim()) {
       setStoreError(t("setup.errorStoreNameRequired"));
       return;
     }
     setStoreError("");
-    setCurrentStep(2);
+    setCurrentStep(3);
   };
 
-  const handleNextStep2 = (e: React.FormEvent) => {
+  const handleNextStep3 = (e: React.FormEvent) => {
     e.preventDefault();
     const errors: { name?: string; pin?: string; pinConfirm?: string } = {};
 
@@ -64,7 +73,7 @@ export const SetupWizard: React.FC = () => {
     }
 
     setAdminErrors({});
-    setCurrentStep(3);
+    setCurrentStep(4);
   };
 
   const handleFinish = async () => {
@@ -73,11 +82,15 @@ export const SetupWizard: React.FC = () => {
       // 1. Hash PIN with salt
       const pinHash = await hashPin(pin);
 
-      // 2. Save store settings
+      // 2. Save store settings with selected preset configuration
+      const preset = BUSINESS_PRESETS[businessType];
       await settingsRepo.updateSettings({
         storeName: storeName.trim(),
         address: address.trim(),
         phone: phone.trim(),
+        businessType: preset.businessType,
+        productView: preset.productView,
+        features: { ...preset.features },
       });
 
       // 3. Save initial admin user
@@ -111,18 +124,77 @@ export const SetupWizard: React.FC = () => {
         {/* Header */}
         <div className="flex flex-col gap-1 border-b border-[var(--border)] pb-4">
           <span className="text-sm font-medium text-[var(--text-muted)]">
-            {t("setup.step", { current: currentStep, total: 3 })}
+            {t("setup.step", { current: currentStep, total: 4 })}
           </span>
           <h1 className="text-xl font-semibold text-[var(--text)]">
-            {currentStep === 1 && t("setup.storeTitle")}
-            {currentStep === 2 && t("setup.adminTitle")}
-            {currentStep === 3 && t("setup.finishTitle")}
+            {currentStep === 1 && t("setup.presetTitle")}
+            {currentStep === 2 && t("setup.storeTitle")}
+            {currentStep === 3 && t("setup.adminTitle")}
+            {currentStep === 4 && t("setup.finishTitle")}
           </h1>
         </div>
 
-        {/* Step 1: Store info */}
+        {/* Step 1: Business Type Preset */}
         {currentStep === 1 && (
-          <form onSubmit={handleNextStep1} className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
+            <p className="text-sm text-[var(--text-muted)]">{t("setup.presetSubtitle")}</p>
+
+            <div
+              className="flex flex-col gap-3"
+              role="radiogroup"
+              aria-label={t("setup.presetTitle")}
+            >
+              {(["retail", "cafe", "custom"] as BusinessType[]).map((type) => {
+                const preset = BUSINESS_PRESETS[type];
+                const isSelected = businessType === type;
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    role="radio"
+                    aria-checked={isSelected}
+                    onClick={() => setBusinessType(type)}
+                    className={`min-h-[56px] p-4 text-left rounded-[var(--radius-control)] border transition-colors flex items-start gap-3 cursor-pointer focus-visible:outline-2 focus-visible:outline-[var(--primary)] ${
+                      isSelected
+                        ? "border-[var(--primary)] bg-[var(--primary-soft)]"
+                        : "border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--bg)]"
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-full border flex items-center justify-center mt-0.5 shrink-0 ${
+                        isSelected
+                          ? "border-[var(--primary)] bg-[var(--primary)]"
+                          : "border-[var(--border-strong)] bg-white"
+                      }`}
+                    >
+                      {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                    </div>
+                    <div className="flex flex-col gap-0.5">
+                      <span
+                        className={`text-base font-semibold ${isSelected ? "text-[var(--primary)]" : "text-[var(--text)]"}`}
+                      >
+                        {t(preset.titleKey)}
+                      </span>
+                      <span className="text-sm text-[var(--text-muted)]">
+                        {t(preset.descriptionKey)}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <Button type="button" variant="primary" onClick={handleNextStep1}>
+                {t("setup.next")}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Step 2: Store info */}
+        {currentStep === 2 && (
+          <form onSubmit={handleNextStep2} className="flex flex-col gap-4">
             <Input
               label={t("setup.storeName")}
               placeholder={t("setup.storeNamePlaceholder")}
@@ -149,7 +221,10 @@ export const SetupWizard: React.FC = () => {
               onChange={(e) => setPhone(e.target.value)}
             />
 
-            <div className="pt-2 flex justify-end">
+            <div className="pt-2 flex justify-between items-center">
+              <Button type="button" variant="secondary" onClick={() => setCurrentStep(1)}>
+                {t("common.back")}
+              </Button>
               <Button type="submit" variant="primary">
                 {t("setup.next")}
               </Button>
@@ -157,9 +232,9 @@ export const SetupWizard: React.FC = () => {
           </form>
         )}
 
-        {/* Step 2: Admin account */}
-        {currentStep === 2 && (
-          <form onSubmit={handleNextStep2} className="flex flex-col gap-4">
+        {/* Step 3: Admin account */}
+        {currentStep === 3 && (
+          <form onSubmit={handleNextStep3} className="flex flex-col gap-4">
             <Input
               label={t("setup.adminName")}
               placeholder={t("setup.adminNamePlaceholder")}
@@ -204,7 +279,7 @@ export const SetupWizard: React.FC = () => {
             />
 
             <div className="pt-2 flex justify-between items-center">
-              <Button type="button" variant="secondary" onClick={() => setCurrentStep(1)}>
+              <Button type="button" variant="secondary" onClick={() => setCurrentStep(2)}>
                 {t("common.back")}
               </Button>
               <Button type="submit" variant="primary">
@@ -214,8 +289,8 @@ export const SetupWizard: React.FC = () => {
           </form>
         )}
 
-        {/* Step 3: Finish */}
-        {currentStep === 3 && (
+        {/* Step 4: Finish */}
+        {currentStep === 4 && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3 text-base text-[var(--text)]">
               <p>{t("setup.finishNote")}</p>
@@ -230,7 +305,7 @@ export const SetupWizard: React.FC = () => {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => setCurrentStep(2)}
+                onClick={() => setCurrentStep(3)}
                 disabled={isLoading}
               >
                 {t("common.back")}

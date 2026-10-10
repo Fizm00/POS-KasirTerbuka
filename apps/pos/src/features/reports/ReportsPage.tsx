@@ -3,6 +3,7 @@ import { Download } from "lucide-react";
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { Button } from "../../components/Button";
 import { Table, type Column } from "../../components/Table";
+import { DateRangePicker } from "../../components/DateRangePicker";
 import {
   reportsRepo,
   type DailySalesItem,
@@ -18,10 +19,12 @@ import {
   jakartaDateToIsoRange,
   type DatePreset,
 } from "../../lib/dates";
+import { useFeatureEnabled } from "../../lib/features";
 import { downloadCsvFile, generateTransactionsCsv } from "../../lib/csv";
 import { t } from "../../i18n";
 
 export const ReportsPage: React.FC = () => {
+  const isStockInEnabled = useFeatureEnabled("stockIn");
   const [activePreset, setActivePreset] = useState<DatePreset>("today");
 
   // Initial date strings default to "Hari ini" in Asia/Jakarta
@@ -35,6 +38,7 @@ export const ReportsPage: React.FC = () => {
     averagePerTransaction: 0,
     grossProfit: 0,
   });
+  const [stockValue, setStockValue] = useState<number>(0);
   const [dailySales, setDailySales] = useState<DailySalesItem[]>([]);
   const [topProducts, setTopProducts] = useState<TopProductItem[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -61,25 +65,6 @@ export const ReportsPage: React.FC = () => {
     return map;
   }, [users]);
 
-  // Handle Preset selection
-  const handleSelectPreset = (preset: "today" | "7days" | "month") => {
-    setActivePreset(preset);
-    const range = getPresetDateRange(preset);
-    setStartDateStr(range.startDateStr);
-    setEndDateStr(range.endDateStr);
-  };
-
-  // Handle custom date change
-  const handleStartDateChange = (val: string) => {
-    setStartDateStr(val);
-    setActivePreset("custom");
-  };
-
-  const handleEndDateChange = (val: string) => {
-    setEndDateStr(val);
-    setActivePreset("custom");
-  };
-
   // Fetch report data whenever start/end dates change
   useEffect(() => {
     let isMounted = true;
@@ -104,6 +89,21 @@ export const ReportsPage: React.FC = () => {
       isMounted = false;
     };
   }, [startDateStr, endDateStr]);
+
+  // Fetch stock valuation when stockIn feature is enabled
+  useEffect(() => {
+    let isMounted = true;
+    if (isStockInEnabled) {
+      reportsRepo.getTotalStockValue().then((val) => {
+        if (isMounted) {
+          setStockValue(val);
+        }
+      });
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [isStockInEnabled]);
 
   // Export CSV handler
   const handleExportCsv = async () => {
@@ -192,75 +192,29 @@ export const ReportsPage: React.FC = () => {
       </div>
 
       {/* Date Presets and Custom Filter Controls */}
-      <div className="flex flex-wrap items-end gap-3 bg-[var(--surface)] p-4 border border-[var(--border)] rounded-[var(--radius-control)]">
-        {/* Presets Button Group */}
-        <div className="flex items-center gap-1.5 p-1 bg-[var(--bg)] border border-[var(--border)] rounded-[var(--radius-control)]">
-          <button
-            type="button"
-            onClick={() => handleSelectPreset("today")}
-            className={`min-h-[40px] px-3.5 text-sm font-medium rounded-[var(--radius-control)] transition-colors cursor-pointer ${
-              activePreset === "today"
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--text-muted)] hover:text-[var(--text)]"
-            }`}
-          >
-            {t("reports.presetToday")}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSelectPreset("7days")}
-            className={`min-h-[40px] px-3.5 text-sm font-medium rounded-[var(--radius-control)] transition-colors cursor-pointer ${
-              activePreset === "7days"
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--text-muted)] hover:text-[var(--text)]"
-            }`}
-          >
-            {t("reports.preset7Days")}
-          </button>
-          <button
-            type="button"
-            onClick={() => handleSelectPreset("month")}
-            className={`min-h-[40px] px-3.5 text-sm font-medium rounded-[var(--radius-control)] transition-colors cursor-pointer ${
-              activePreset === "month"
-                ? "bg-[var(--primary)] text-white"
-                : "text-[var(--text-muted)] hover:text-[var(--text)]"
-            }`}
-          >
-            {t("reports.presetMonth")}
-          </button>
-        </div>
-
-        {/* Custom Range: Dari Tanggal */}
-        <div className="space-y-1">
-          <label className="block text-xs font-medium text-[var(--text-muted)]">
-            {t("reports.dateFrom")}
-          </label>
-          <input
-            type="date"
-            aria-label={t("reports.dateFrom")}
-            value={startDateStr}
-            onChange={(e) => handleStartDateChange(e.target.value)}
-            className="min-h-[48px] h-[48px] px-3 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
-          />
-        </div>
-
-        {/* Custom Range: Sampai Tanggal */}
-        <div className="space-y-1">
-          <label className="block text-xs font-medium text-[var(--text-muted)]">
-            {t("reports.dateTo")}
-          </label>
-          <input
-            type="date"
-            aria-label={t("reports.dateTo")}
-            value={endDateStr}
-            onChange={(e) => handleEndDateChange(e.target.value)}
-            className="min-h-[48px] h-[48px] px-3 text-base bg-[var(--surface)] text-[var(--text)] rounded-[var(--radius-control)] border border-[var(--border-strong)] focus-visible:outline-2 focus-visible:outline-[var(--primary)] cursor-pointer"
-          />
-        </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-[var(--surface)] p-4 border border-[var(--border)] rounded-[var(--radius-control)]">
+        <DateRangePicker
+          startDate={startDateStr}
+          endDate={endDateStr}
+          activePreset={activePreset}
+          onChange={(s, e, preset) => {
+            setStartDateStr(s);
+            setEndDateStr(e);
+            if (preset) {
+              setActivePreset(preset);
+            } else {
+              setActivePreset("custom");
+            }
+          }}
+        />
       </div>
 
-      {/* Four Plain Figures in a row (no icons, no colored circles) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {/* Figures in a row */}
+      <div
+        className={`grid grid-cols-1 sm:grid-cols-2 ${
+          isStockInEnabled ? "lg:grid-cols-5" : "lg:grid-cols-4"
+        } gap-4`}
+      >
         {/* Total Penjualan */}
         <div className="bg-[var(--surface)] p-5 border border-[var(--border)] rounded-[var(--radius-control)] flex flex-col justify-between">
           <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
@@ -300,6 +254,18 @@ export const ReportsPage: React.FC = () => {
             {formatRupiah(summary.grossProfit)}
           </span>
         </div>
+
+        {/* Nilai Stok */}
+        {isStockInEnabled && (
+          <div className="bg-[var(--surface)] p-5 border border-[var(--border)] rounded-[var(--radius-control)] flex flex-col justify-between">
+            <span className="text-xs font-medium text-[var(--text-muted)] uppercase tracking-wider">
+              {t("reports.summary.stockValue")}
+            </span>
+            <span className="text-2xl font-bold tracking-tight text-[var(--text)] tabular-nums mt-2">
+              {formatRupiah(stockValue)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Below: Bar Chart of Daily Sales and Top Products Table */}

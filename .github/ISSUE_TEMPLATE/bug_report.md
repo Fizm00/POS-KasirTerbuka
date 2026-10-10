@@ -1,9 +1,9 @@
 ---
 name: Laporan Masalah (Bug Report)
 about: Laporkan bug atau kendala teknis pada Kasir Terbuka
-title: '[BUG] '
+title: "[BUG] "
 labels: bug
-assignees: ''
+assignees: ""
 ---
 
 **Deskripsi Masalah**
@@ -11,6 +11,7 @@ Penjelasan ringkas dan jelas mengenai kendala yang terjadi.
 
 **Langkah Reproduksi**
 Langkah-langkah untuk memicu masalah:
+
 1. Buka layar '...'
 2. Klik tombol '....'
 3. Lihat pesan error atau kendala yang muncul
@@ -19,6 +20,7 @@ Langkah-langkah untuk memicu masalah:
 Penjelasan tentang apa yang seharusnya terjadi menurut panduan aplikasi.
 
 **Platform & Lingkungan**
+
 - Perangkat: [misal: PC Desktop / Tablet Samsung / HP Android]
 - Sistem Operasi: [misal: Windows 11 / Android 13 / macOS Sonoma]
 - Mode Aplikasi: [misal: PWA di Chrome / Tauri Desktop / Aplikasi APK]

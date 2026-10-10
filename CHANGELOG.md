@@ -5,9 +5,32 @@ All notable changes to the Kasir Terbuka project will be documented in this file
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-10-10
+
+### Added
+
+- **Product CSV Import (`/produk`):**
+  - High-performance CSV file upload and preview using `PapaParse` and `Zod`.
+  - Validation modal displaying valid rows, new items, SKU updates, and line-by-line validation errors.
+  - Automatic category resolution matching existing names or creating new categories.
+  - Sample CSV template download (`Template-Import-Produk.csv`) directly in the modal.
+  - Modular feature toggle (`csvImport`) in Store Settings.
+- **Stock Movement Audit, Bulk Stock-In & Valuation (`/stok-masuk`):**
+  - Dexie Schema v5 adding `stockMovements` table with compound index `[productId+createdAt]`.
+  - Atomic inventory transactions for incoming stock (`in`), physical opname adjustments (`adjust`), sales deductions (`sale`), and void restitutions (`void`).
+  - `ProductStockDrawer`: 3-tab drawer on product catalog for quick stock-in, stock adjustments with auto-calculated delta, and complete audit history.
+  - `BulkStockInPage` (`/stok-masuk`): multi-product bulk stock-in screen with instant search and total cost calculation.
+  - Stock valuation metric ("Nilai persediaan") displayed in Sales Reports (`/laporan`).
+  - Modular feature toggle (`stockIn`) in Store Settings.
+- **Multi-Platform Binaries & Distribution:**
+  - Windows x64 setup executable installer (`Kasir-Terbuka-Setup-1.1.0.exe`).
+  - Android standalone APK package (`Kasir-Terbuka-1.1.0.apk`).
+  - GitHub Actions automated release pipeline for macOS Universal DMG and Linux AppImage.
+
 ## [1.0.0] - 2026-10-10
 
 ### Added
+
 - Direct installer downloads on the public landing page without mandatory GitHub redirection (`.exe`, `.apk`, `.dmg`, `.AppImage`).
 - Standalone landing page app (`apps/landing`) with independent Vite build, Newsreader editorial typography, and 58 mm thermal receipt hero strip.
 - Dexie schema version 2 upgrade with compound indexes (`[status+createdAt]`, `[isActive+categoryId]`) for high-speed queries.

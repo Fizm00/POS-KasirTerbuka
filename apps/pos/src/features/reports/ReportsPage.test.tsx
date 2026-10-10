@@ -182,4 +182,51 @@ describe("ReportsPage (Admin)", () => {
       expect(createObjectUrlMock).toHaveBeenCalled();
     });
   });
+
+  it("displays 'Nilai stok' card when stockIn is enabled and hides it when disabled", async () => {
+    // When stockIn is disabled (default)
+    const { unmount } = render(
+      <MemoryRouter>
+        <ReportsPage />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByText(/Nilai stok/i)).not.toBeInTheDocument();
+    unmount();
+
+    // Enable stockIn feature
+    const { useSettingsStore, DEFAULT_FEATURES } = await import("../../lib/features");
+    useSettingsStore.setState({
+      settings: {
+        id: "default",
+        storeName: "Toko Test",
+        address: "Jl Test",
+        phone: "123",
+        receiptFooter: "Terima kasih",
+        paperWidth: 58,
+        currency: "IDR",
+        features: {
+          ...DEFAULT_FEATURES,
+          stockIn: true,
+        },
+      },
+    });
+
+    render(
+      <MemoryRouter>
+        <ReportsPage />
+      </MemoryRouter>
+    );
+
+    // Kopi: 100 * 10.000 = 1.000.000
+    // Nasi: 50 * 12.000 = 600.000
+    // Total Nilai Stok = 1.600.000
+    await waitFor(() => {
+      expect(screen.getByText(/Nilai stok/i)).toBeInTheDocument();
+      expect(screen.getByText("Rp 1.600.000")).toBeInTheDocument();
+    });
+
+    // Reset store
+    useSettingsStore.setState({ settings: null });
+  });
 });

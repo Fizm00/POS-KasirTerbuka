@@ -1,9 +1,11 @@
-import type { UserRole } from "../../db/schema";
+import type { FeatureKey, StoreSettings, UserRole } from "../../db/schema";
+import { isFeatureEnabled } from "../../lib/features";
 
 export interface NavItem {
   id: string;
   labelKey: string;
   path: string;
+  requiredFeature?: FeatureKey;
 }
 
 export const ALL_NAV_ITEMS: NavItem[] = [
@@ -16,9 +18,34 @@ export const ALL_NAV_ITEMS: NavItem[] = [
 ];
 
 /**
- * Checks whether a user role is allowed to access a specific route.
+ * Route paths that are gated by specific feature flags.
+ * If the feature is disabled, access is rejected regardless of role.
  */
-export function canAccessRoute(role: UserRole, path: string): boolean {
+export const FEATURE_ROUTES: Record<string, FeatureKey> = {
+  "/stok-masuk": "stockIn",
+  "/shift": "shifts",
+  "/pengeluaran": "expenses",
+  "/meja": "tables",
+  "/piutang": "receivables",
+};
+
+/**
+ * Checks whether a user role is allowed to access a specific route,
+ * taking into account both role permissions and active feature flags.
+ */
+export function canAccessRoute(
+  role: UserRole,
+  path: string,
+  settings?: StoreSettings | null
+): boolean {
+  // If the route belongs to a feature module and the feature is disabled, deny access
+  const requiredFeature =
+    FEATURE_ROUTES[path] || ALL_NAV_ITEMS.find((item) => item.path === path)?.requiredFeature;
+
+  if (requiredFeature && !isFeatureEnabled(requiredFeature, settings)) {
+    return false;
+  }
+
   if (role === "admin") {
     return true;
   }
@@ -51,9 +78,18 @@ export function canViewAllTransactions(role: UserRole): boolean {
   return role === "admin";
 }
 
+export function canAdjustStock(role: UserRole): boolean {
+  return role === "admin";
+}
+
 /**
- * Returns navigation menu items visible for the given user role.
+ * Returns navigation menu items visible for the given user role and active features.
  */
-export function getNavigationItems(role: UserRole): NavItem[] {
-  return ALL_NAV_ITEMS.filter((item) => canAccessRoute(role, item.path));
+export function getNavigationItems(role: UserRole, settings?: StoreSettings | null): NavItem[] {
+  return ALL_NAV_ITEMS.filter((item) => {
+    if (item.requiredFeature && !isFeatureEnabled(item.requiredFeature, settings)) {
+      return false;
+    }
+    return canAccessRoute(role, item.path, settings);
+  });
 }
