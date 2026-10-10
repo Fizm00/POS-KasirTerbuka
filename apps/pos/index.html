@@ -11,6 +11,39 @@
       content="Aplikasi kasir (POS) open-source dan offline-first untuk toko kecil Indonesia."
     />
     <title>Kasir Terbuka</title>
+    <script>
+      (function () {
+        try {
+          var isNative =
+            window.location.hostname === "tauri.localhost" ||
+            window.location.origin.indexOf("tauri.localhost") !== -1 ||
+            window.location.protocol === "tauri:" ||
+            window.location.protocol === "capacitor:" ||
+            Boolean(window.__TAURI__) ||
+            Boolean(window.__TAURI_INTERNALS__) ||
+            Boolean(window.isTauri) ||
+            Boolean(window.chrome && window.chrome.webview) ||
+            Boolean(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+
+          if (isNative) {
+            if ("serviceWorker" in navigator) {
+              navigator.serviceWorker.getRegistrations().then(function (regs) {
+                for (var i = 0; i < regs.length; i++) {
+                  regs[i].unregister();
+                }
+              });
+            }
+            if ("caches" in window) {
+              caches.keys().then(function (keys) {
+                for (var j = 0; j < keys.length; j++) {
+                  caches.delete(keys[j]);
+                }
+              });
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>
