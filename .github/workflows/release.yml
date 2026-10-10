@@ -6,6 +6,9 @@ on:
       - "v*"
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   release-desktop:
     permissions:
@@ -68,6 +71,7 @@ jobs:
           args: ${{ matrix.args }}
 
   release-android:
+    needs: release-desktop
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -125,9 +129,8 @@ jobs:
           path: release-artifacts/Kasir-Terbuka-android-debug.apk
 
       - name: Attach APK to GitHub Release
-        uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: release-artifacts/Kasir-Terbuka-android-debug.apk
+        run: |
+          gh release upload "${{ github.ref_name }}" release-artifacts/Kasir-Terbuka-android-debug.apk --clobber
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
