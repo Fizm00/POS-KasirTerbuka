@@ -4,32 +4,32 @@
 
 # Kasir Terbuka
 
-### _Modern, Local-First & 100% Offline Point-of-Sale System_
+### A Modern, Local-First, Offline Point-of-Sale System
 
-**Aplikasi kasir (POS) open-source, cepat, dan tenang untuk warung & UMKM Indonesia.**
+**A free, open-source, and distraction-free point-of-sale application designed for small retailers and food & beverage shops (warung, cafes, grocery stores).**
 <br>
-_Tersedia untuk Windows, Android, macOS, Linux, dan Web PWA • Nol biaya langganan • 100% Privasi data lokal._
+Available on Windows, Android, macOS, Linux, and Web PWA &bull; Zero subscription fees &bull; 100% local data privacy.
 
   <br>
 
-[![Latest Release](https://img.shields.io/badge/release-v1.1.0-1F6F5C?style=for-the-badge&logo=github)](https://github.com/Fizm00/POS-KasirTerbuka/releases/latest)
-[![License](https://img.shields.io/badge/license-AGPL--3.0-1F6F5C?style=for-the-badge)](LICENSE)
-[![Tests Status](<https://img.shields.io/badge/tests-283%20passed%20(100%25)-10B981?style=for-the-badge&logo=vitest&logoColor=white>)](apps/pos)
-[![Architecture](https://img.shields.io/badge/architecture-100%25%20Local--First-D97706?style=for-the-badge)](#-mengapa-kasir-terbuka-why-kasir-terbuka)
-[![Platforms](https://img.shields.io/badge/platform-Windows%20%7C%20Android%20%7C%20macOS%20%7C%20Linux%20%7C%20PWA-2563EB?style=for-the-badge)](#-unduh--instalasi-multi-platform)
+[![Latest Release](https://img.shields.io/badge/Release-v1.1.0-1F6F5C?style=for-the-badge&logo=github)](https://github.com/Fizm00/POS-KasirTerbuka/releases/latest)
+[![License](https://img.shields.io/badge/License-AGPL--3.0-1F6F5C?style=for-the-badge)](LICENSE)
+[![Tests Status](https://img.shields.io/badge/Tests-283%20passed-10B981?style=for-the-badge&logo=vitest&logoColor=white)](apps/pos)
+[![Architecture](https://img.shields.io/badge/Architecture-100%25%20Local--First-D97706?style=for-the-badge)](#why-kasir-terbuka)
+[![Platforms](https://img.shields.io/badge/Platforms-Windows%20%7C%20Android%20%7C%20macOS%20%7C%20Linux%20%7C%20PWA-2563EB?style=for-the-badge)](#multi-platform-downloads)
 
   <br>
 
-[🚀 **Coba Web PWA**](https://fizm00.github.io/POS-KasirTerbuka/) &nbsp;•&nbsp;
-[📥 **Unduh Aplikasi**](#-unduh--instalasi-multi-platform) &nbsp;•&nbsp;
-[✨ **Fitur Unggulan**](#-fitur-unggulan-features) &nbsp;•&nbsp;
-[🖨️ **Setup Printer**](docs/printer-setup.md) &nbsp;•&nbsp;
-[📖 **Panduan Pengguna**](docs/user-guide.md)
+[**Launch Web PWA**](https://fizm00.github.io/POS-KasirTerbuka/) &nbsp;&bull;&nbsp;
+[**Download Binaries**](#multi-platform-downloads) &nbsp;&bull;&nbsp;
+[**Key Features**](#key-features) &nbsp;&bull;&nbsp;
+[**Printer Setup**](docs/printer-setup.md) &nbsp;&bull;&nbsp;
+[**User Guide**](docs/user-guide.md)
 
   <br>
   <br>
 
-  <img src="apps/pos/public/screenshot-cashier.svg" alt="Kasir Terbuka Interface" width="920" />
+  <img src="apps/pos/public/screenshot-cashier.svg" alt="Kasir Terbuka Cashier Terminal" width="920" />
 
 </div>
 
@@ -37,88 +37,88 @@ _Tersedia untuk Windows, Android, macOS, Linux, dan Web PWA • Nol biaya langga
 
 ---
 
-## ⚡ Mengapa Kasir Terbuka? (Why Kasir Terbuka?)
+## Why Kasir Terbuka?
 
-Kasir Terbuka lahir dari kebutuhan nyata pemilik toko, warung kelontong, kafe, dan UMKM di Indonesia yang menginginkan aplikasi kasir yang **responsif**, **bebas biaya langganan**, **tidak bergantung pada internet**, dan **sepenuhnya berada dalam kendali pemilik toko**.
+Kasir Terbuka was created to solve the real operational challenges faced by small shop owners, grocery stores, cafes, and independent merchants in Indonesia who need a point-of-sale system that is **fast**, **subscription-free**, **fully operational without internet**, and **completely under the owner's control**.
 
-| Pilar Utama                              | Deskripsi                                                                                                                                                                                              |
-| :--------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🔒 **100% Local-First & Offline**        | **Tanpa server backend, tanpa akun cloud, nol biaya bulanan.** Seluruh database tersimpan langsung di IndexedDB perangkat via Dexie.js. Data bisnis Anda tidak pernah dikirim ke server pihak ketiga.  |
-| ⚡ **Transaksi Kilat (< 30 Detik)**      | Didesain khusus untuk antrean kasir yang sibuk. Navigasi penuh keyboard (`F2` untuk pencarian SKU/barcode, `F9` untuk pembayaran instan), input barcode scanner instan, dan hitung kembalian otomatis. |
-| 🖨️ **Dukungan Printer Termal Luas**      | Cetak struk belanja 58 mm dan 80 mm secara native menggunakan format perintah ESC/POS standar industri melalui USB, Bluetooth SPP (Android), WebSerial, WebUSB, dan LAN/Wi-Fi socket.                  |
-| 📦 **Manajemen Stok & Audit Terperinci** | Dilengkapi fitur Penerimaan Barang Masuk (Bulk Stock-In), penyesuaian fisik (Stock Opname), pelacakan mutasi stok, peringatan stok menipis, dan valuasi nilai persediaan modal secara real-time.       |
-| 📑 **Impor Katalog Massal (CSV)**        | Tambahkan ratusan produk dan kategori sekaligus dalam hitungan detik menggunakan format CSV dengan validasi cerdas anti-duplikasi SKU.                                                                 |
-| 🛡️ **Keamanan PIN Lokal & Hak Akses**    | Akses kasir berbasis PIN dengan enkripsi PBKDF2 salted hash, penguncian layar otomatis (auto-lock saat ditinggal), dan perlindungan otorisasi admin untuk pembatalan transaksi (void).                 |
-| 💾 **Pencadangan Total (Atomic Backup)** | Ekspor seluruh transaksi, katalog produk, dan pengaturan toko ke satu file cadangan yang aman, serta pemulihan atomik tanpa risiko data korup.                                                         |
-
----
-
-## 📥 Unduh & Instalasi Multi-Platform
-
-Pilih paket instalasi yang sesuai untuk perangkat Anda dari **[Rilis Resmi v1.1.0](https://github.com/Fizm00/POS-KasirTerbuka/releases/latest)**:
-
-| Platform    | Format Berkas         | Arsitektur Target                 | Tautan Unduhan Langsung                                                                                                                             | Panduan                                            |
-| :---------- | :-------------------- | :-------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- | :------------------------------------------------- |
-| **Windows** | Setup `.exe` / `.msi` | x64 (Windows 10 / 11)             | [📥 **Kasir.Terbuka_1.1.0_x64-setup.exe**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_x64-setup.exe)   | [Panduan Desktop](docs/desktop-installation.md)    |
-| **Android** | Package `.apk`        | Universal / ARM64 (Android 8–15)  | [📱 **Kasir-Terbuka-android-debug.apk**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir-Terbuka-android-debug.apk)       | [Panduan Android](docs/android-setup.md)           |
-| **macOS**   | Disk Image `.dmg`     | Universal (Apple Silicon & Intel) | [🍎 **Kasir.Terbuka_1.1.0_universal.dmg**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_universal.dmg)   | [Panduan Desktop](docs/desktop-installation.md)    |
-| **Linux**   | `.AppImage` / `.deb`  | x86_64 / amd64                    | [🐧 **Kasir.Terbuka_1.1.0_amd64.AppImage**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_amd64.AppImage) | [Panduan Desktop](docs/desktop-installation.md)    |
-| **Web PWA** | Web App Mandiri       | Semua Browser Modern              | [🌐 **Buka Aplikasi Kasir (PWA)**](https://fizm00.github.io/POS-KasirTerbuka/)                                                                      | [Petunjuk PWA](#-instalasi-sebagai-pwa-standalone) |
-
-> 💡 **Informasi untuk Desktop & Android:** Karena aplikasi ini berstatus _open-source community_ dan belum menggunakan sertifikat berbayar, Anda mungkin melihat dialog _Windows SmartScreen_ ("Windows protected your PC") atau _Android Play Protect_. Anda dapat melanjutkan dengan mengeklik **"More info" ➔ "Run anyway"** atau **"Tetap pasang"**. Detail verifikasi integritas dapat dibaca di [Panduan Desktop](docs/desktop-installation.md) dan [Panduan Android](docs/android-setup.md).
+| Core Principle                     | Details                                                                                                                                                                                                      |
+| :--------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **100% Local-First & Offline**     | **No backend server, no cloud accounts, and zero monthly subscriptions.** All database records are stored directly on the device using IndexedDB via Dexie.js. Business data never leaves the local machine. |
+| **Fast at the Counter (< 30s)**    | Built specifically for high-throughput counters. Full keyboard navigation (`F2` to search products or scan barcodes, `F9` for instant checkout), barcode scanner support, and automatic change calculations. |
+| **Broad Thermal Printing Support** | Prints 58 mm and 80 mm receipts natively using raw ESC/POS command streams via USB, Bluetooth SPP (Android), WebSerial, WebUSB, and LAN/Wi-Fi TCP sockets.                                                   |
+| **Inventory & Movement Auditing**  | Includes Bulk Stock-In for purchase receipts, physical stock opname adjustments, delta calculations, audit logs, low-stock warnings, and real-time inventory valuation.                                      |
+| **Bulk Catalog Import (CSV)**      | Import hundreds of products and categories in seconds using standard CSV spreadsheets with automated schema validation and duplicate SKU guards.                                                             |
+| **Local PIN & Staff Permissions**  | Role-based permissions (`admin` vs `kasir`), PBKDF2 salted hash encryption, configurable inactivity auto-lock (1–15 minutes), and protected transaction void flows.                                          |
+| **Atomic Data Backup**             | Export complete transaction histories, catalog items, and store settings into a single backup archive, with safe atomic imports validated via Zod.                                                           |
 
 ---
 
-## ✨ Fitur Unggulan (Features)
+## Multi-Platform Downloads
 
-### 🛒 1. Meja Kasir Cepat (`/kasir`)
+Prebuilt binaries and installers are available from the **[Latest v1.1.0 Release](https://github.com/Fizm00/POS-KasirTerbuka/releases/latest)**:
 
-- **Pencarian Kilat & Barcode Scanner:** Tekan `F2` untuk fokus ke pencarian atau pindai barcode produk secara instan menggunakan barcode scanner fisik (USB/Bluetooth HID).
-- **Keranjang Kasir Responsif:** Atur kuantitas barang, hapus item, dan tinjau subtotal secara real-time.
-- **Diskon Transaksi Fleksibel:** Dukungan diskon nominal Rupiah (`Rp`) maupun persentase (`%`) dengan kalkulasi transparan.
-- **Peringatan Stok Menipis:** Indikator tenang saat stok mendekati batas minimum, serta pencegahan transaksi jika stok habis.
-- **Metode Pembayaran:** Tunai (dengan hitung kembalian otomatis & tombol pecahan uang pas), QRIS statis, dan Transfer Bank.
-- **Cetak Struk Instan:** Menghasilkan nomor invoice harian otomatis (`INV-YYYYMMDD-0001`) dan mencetak ke printer struk.
+| Platform    | Package Format        | Target Architecture               | Direct Download Link                                                                                                                             | Installation Guide                                        |
+| :---------- | :-------------------- | :-------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------- |
+| **Windows** | Setup `.exe` / `.msi` | x64 (Windows 10 / 11)             | [**Kasir.Terbuka_1.1.0_x64-setup.exe**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_x64-setup.exe)   | [Desktop Guide](docs/desktop-installation.md)             |
+| **Android** | Package `.apk`        | Universal / ARM64 (Android 8–15)  | [**Kasir-Terbuka-android-debug.apk**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir-Terbuka-android-debug.apk)       | [Android Guide](docs/android-setup.md)                    |
+| **macOS**   | Disk Image `.dmg`     | Universal (Apple Silicon & Intel) | [**Kasir.Terbuka_1.1.0_universal.dmg**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_universal.dmg)   | [Desktop Guide](docs/desktop-installation.md)             |
+| **Linux**   | `.AppImage` / `.deb`  | x86_64 / amd64                    | [**Kasir.Terbuka_1.1.0_amd64.AppImage**](https://github.com/Fizm00/POS-KasirTerbuka/releases/download/v1.1.0/Kasir.Terbuka_1.1.0_amd64.AppImage) | [Desktop Guide](docs/desktop-installation.md)             |
+| **Web PWA** | Standalone Web App    | Any Modern Browser                | [**Launch Kasir Terbuka Web**](https://fizm00.github.io/POS-KasirTerbuka/)                                                                       | [PWA Instructions](#progressive-web-app-pwa-installation) |
 
-### 📦 2. Manajemen Produk & Stok (`/produk` & `/stok-masuk`)
-
-- **Katalog Produk Terstruktur:** Tambah, ubah, dan kelola produk lengkap dengan SKU, kategori, harga modal, harga jual, dan batas stok menipis.
-- **Impor Massal via CSV:** Unggah katalog toko dalam hitungan detik dengan validasi cerdas anti-duplikasi dan template resmi yang dapat diunduh langsung.
-- **Drawer Mutasi Stok Individual:** Audit riwayat pergerakan barang (Barang Masuk, Opname/Penyesuaian Fisik, Penjualan Kasir, Pembatalan/Void).
-- **Penerimaan Barang Masuk Massal (`/stok-masuk`):** Input banyak barang datang dari distributor atau supplier dalam satu halaman ringkas.
-- **Valuasi Stok Otomatis:** Perhitungan total nilai modal persediaan barang toko yang selalu terbarui.
-
-### 📊 3. Laporan Keuangan & Penjualan (`/laporan`)
-
-- **Ringkasan Finansial:** Pantau Total Omset Penjualan, Jumlah Transaksi, Rata-rata Nilai Keranjang (AOV), Laba Kotor, dan Nilai Persediaan Stok.
-- **Filter Rentang Waktu:** Hari Ini, 7 Hari Terakhir, Bulan Ini, atau Rentang Tanggal Kustom.
-- **Grafik Tren Penjualan:** Grafik batang omset penjualan harian yang bersih dan mudah dianalisis.
-- **Daftar Produk Terlaris:** Menampilkan produk dengan volume penjualan dan pendapatan tertinggi.
-- **Ekspor CSV Akuntansi:** Unduh ringkasan laporan dan rincian transaksi per item untuk diolah di Microsoft Excel atau Google Sheets.
-
-### 🧾 4. Riwayat Transaksi & Pembatalan (`/riwayat`)
-
-- **Pencarian Transaksi Lampau:** Filter transaksi berdasarkan tanggal, kasir yang bertugas, dan status transaksi.
-- **Rincian Struk & Cetak Ulang:** Lihat kembali snapshot produk saat transaksi dibuat dan cetak ulang struk kapan saja.
-- **Pembatalan Aman (Void):** Khusus hak akses admin, mencatat alasan pembatalan dan secara otomatis mengembalikan stok barang ke database.
-
-### 🔐 5. Keamanan PIN Lokal & Hak Akses (`/pengguna`)
-
-- **Multi-Pengguna:** Mendukung peran `admin` (akses penuh semua fitur) dan `kasir` (hanya meja kasir & riwayat).
-- **Enkripsi PIN Kuat:** Menggunakan hashing PBKDF2 salted hash melalui Web Crypto API standar industri.
-- **Kunci Otomatis (Auto-Lock):** Penguncian layar otomatis setelah periode tidak aktif (1–15 menit) untuk melindungi meja kasir saat ditinggalkan.
-
-### ⚙️ 6. Pengaturan Toko & Backup Atomik (`/pengaturan`)
-
-- **Personalisasi Struk Belanja:** Nama toko, alamat, nomor telepon, catatan kaki struk (footer), serta pilihan lebar kertas 58 mm atau 80 mm.
-- **Pencadangan Total (Atomic Backup):** Ekspor seluruh basis data ke berkas `.json` dan pemulihan aman dengan validasi Zod.
-- **Penyimpanan Permanen:** Meminta hak `navigator.storage.persist()` ke sistem browser agar data tidak pernah terhapus otomatis oleh sistem pembersih cache.
+> **Note on Desktop & Android Installers:** Because this is an open-source community release without paid commercial code-signing certificates, operating systems may display a SmartScreen warning ("Windows protected your PC") or Android Play Protect prompt. You can safely proceed by clicking **"More info" -> "Run anyway"** on Windows or **"Install anyway"** on Android. Read the [Desktop Installation Guide](docs/desktop-installation.md) and [Android Setup Guide](docs/android-setup.md) for verification details.
 
 ---
 
-## 🖨️ Kompatibilitas Printer Termal (ESC/POS)
+## Key Features
 
-Kasir Terbuka mengimplementasikan driver pure TypeScript untuk mengonversi data transaksi langsung menjadi perintah **ESC/POS byte stream**:
+### 1. Cashier Terminal (`/kasir`)
+
+- **Rapid Search & Barcode Scanning:** Press `F2` to focus the search box or scan barcodes directly using USB or Bluetooth HID barcode scanners.
+- **Responsive Cart Management:** Adjust quantities, remove items, and preview subtotals with zero latency.
+- **Flexible Discounts:** Support for nominal Rupiah (`Rp`) and percentage (`%`) discounts with transparent calculations.
+- **Low-Stock Alerts:** Non-intrusive warnings when stock drops below threshold, with automatic prevention of out-of-stock transactions.
+- **Multiple Payment Modes:** Cash (with automatic change calculation and quick denomination buttons), static QRIS, and bank transfers.
+- **Instant Receipt Generation:** Generates daily sequential invoice numbers (`INV-YYYYMMDD-0001`) and triggers thermal printing.
+
+### 2. Product Catalog & Inventory (`/produk` and `/stok-masuk`)
+
+- **Comprehensive Catalog Management:** Full CRUD for products, categories, SKU, cost price, selling price, and stock levels.
+- **Bulk CSV Import:** Batch import products with duplicate SKU prevention, error reporting, and downloadable official templates.
+- **Stock Movement Audit Log:** Track every quantity change (Stock-In, Physical Opname Adjustments, Sales, Void/Cancellations).
+- **Bulk Stock-In Page (`/stok-masuk`):** Batch-receive incoming items from suppliers in a streamlined single-page workflow.
+- **Real-Time Inventory Valuation:** Automatically compute total inventory cost value based on active stock levels.
+
+### 3. Financial Reports & Sales Analytics (`/laporan`)
+
+- **Key Business Metrics:** Total gross revenue, transaction counts, average order value (AOV), gross profit, and inventory valuation.
+- **Flexible Date Ranges:** Today, Last 7 Days, This Month, or custom date pickers.
+- **Daily Sales Trends:** Clean, high-contrast bar charts for daily sales volume.
+- **Best-Selling Products:** Top-performing items ranked by volume and revenue.
+- **CSV Accounting Export:** Export comprehensive financial summaries and itemized sales lines for Microsoft Excel or Google Sheets.
+
+### 4. Transaction History & Void Management (`/riwayat`)
+
+- **Historical Search:** Filter records by date range, cashier name, and transaction status (Completed / Voided).
+- **Item Snapshot & Reprinting:** Preserves historical prices and names at the time of purchase; reprint thermal receipts at any time.
+- **Atomic Void Protection:** Requires admin authorization; logs the cancellation reason and safely restores stock levels in a single transaction.
+
+### 5. Staff Management & Local Security (`/pengguna`)
+
+- **Role-Based Access Control:** `admin` (full system access) and `kasir` (cashier terminal and basic history only).
+- **Cryptographic PIN Hashing:** Local PIN authentication secured with salted PBKDF2 hashing via the Web Crypto API.
+- **Automatic Screen Lock:** Configurable timeout (1–15 minutes) to protect unattended cashier counters.
+
+### 6. Store Settings & Atomic Backup (`/pengaturan`)
+
+- **Receipt Customization:** Configure store name, address, phone number, custom footer notes, and paper width (58 mm or 80 mm).
+- **Single-File Atomic Backup:** Full JSON database export with pre-flight entity validation and atomic restoration via Zod.
+- **Persistent Storage Request:** Automatically invokes `navigator.storage.persist()` to safeguard local data against browser cache cleanup.
+
+---
+
+## Thermal Printer Integration (ESC/POS)
+
+Kasir Terbuka implements a pure TypeScript byte encoder to convert transaction data into standard **ESC/POS byte streams**:
 
 ```
 +--------------------------------+
@@ -135,146 +135,146 @@ Kasir Terbuka mengimplementasikan driver pure TypeScript untuk mengonversi data 
 |--------------------------------|
 | Subtotal:            Rp 52.000 |
 | Total:               Rp 52.000 |
-| Tunai:               Rp 60.000 |
-| Kembali:              Rp 8.000 |
+| Cash:                Rp 60.000 |
+| Change:               Rp 8.000 |
 |--------------------------------|
-|     Terima Kasih Atas          |
-|      Kunjungan Anda!           |
+|      Thank you for your        |
+|            visit!              |
 +--------------------------------+
 ```
 
-### Transport & Driver yang Didukung
+### Supported Transports & Drivers
 
-- **Desktop (Tauri 2):** Native USB Raw Socket, Serial COM Port, dan TCP/IP Socket (LAN / Wi-Fi).
-- **Android (Capacitor):** Bluetooth Classic SPP (`RFCOMM`) dengan auto-discovery printer yang sudah dipasangkan (paired).
-- **Browser (PWA):** WebSerial API, WebUSB API, WebBluetooth API, serta fallback `window.print()` dengan optimasi CSS struk kasir 58/80 mm.
+- **Desktop (Tauri 2):** Native USB raw sockets, Serial COM ports, and TCP/IP network sockets (LAN / Wi-Fi).
+- **Android (Capacitor):** Bluetooth Classic SPP (`RFCOMM`) with auto-discovery of paired thermal printers.
+- **Browser (PWA):** WebSerial API, WebUSB API, WebBluetooth API, and standard browser print (`window.print()`) with print CSS optimized for 58 mm and 80 mm thermal rolls.
 
-_Panduan lengkap konfigurasi dan troubleshooting printer termal: [docs/printer-setup.md](docs/printer-setup.md)._
+_For complete wiring, baud rate settings, and troubleshooting instructions, see the [Thermal Printer Setup Guide](docs/printer-setup.md)._
 
 ---
 
-## 🌐 Instalasi sebagai PWA (Standalone)
+## Progressive Web App (PWA) Installation
 
-Kasir Terbuka dapat dipasang langsung dari browser tanpa perlu mengunduh installer:
+Kasir Terbuka can be installed directly from modern browsers without downloading separate installer files:
 
 1. **Desktop (Google Chrome / Microsoft Edge):**
-   - Kunjungi web app [Kasir Terbuka](https://fizm00.github.io/POS-KasirTerbuka/).
-   - Klik ikon instal di bilah alamat browser, atau pilih menu peramban ➔ **"Install Kasir Terbuka"**.
-   - Aplikasi akan berjalan di jendela independen dengan caching offline penuh.
-2. **Android (Chrome):**
-   - Buka web app di Chrome.
-   - Ketuk menu titik tiga di kanan atas.
-   - Pilih **"Tambahkan ke Layar Utama"** atau **"Pasang Aplikasi"**.
+   - Navigate to the [Kasir Terbuka Web App](https://fizm00.github.io/POS-KasirTerbuka/).
+   - Click the install icon in the address bar, or open the browser menu and select **"Install Kasir Terbuka"**.
+   - The application launches in a standalone window with full offline precaching.
+2. **Android (Google Chrome):**
+   - Open the web application in Chrome.
+   - Tap the three dots menu in the top-right corner.
+   - Select **"Add to Home screen"** or **"Install app"**.
 3. **iOS / iPadOS (Safari):**
-   - Buka web app di Safari.
-   - Ketuk tombol **Bagikan (Share)** di bagian bawah layar.
-   - Pilih **"Tambah ke Layar Utama (Add to Home Screen)"**.
+   - Open the web application in Safari.
+   - Tap the **Share** button at the bottom or top of the browser.
+   - Select **"Add to Home Screen"**.
 
 ---
 
-## 🛠️ Arsitektur Monorepo & Teknologi
+## Monorepo Architecture & Technology Stack
 
-Proyek ini dibangun sebagai monorepo menggunakan `pnpm workspace`:
+The repository is structured as a `pnpm workspace` monorepo:
 
 ```
 POS-KasirTerbuka/
 ├── apps/
-│   ├── pos/                  # Aplikasi Kasir (PWA, Tauri Desktop, Capacitor Android)
+│   ├── pos/                  # Cashier Application (PWA, Tauri Desktop, Capacitor Android)
 │   │   ├── src/
-│   │   │   ├── app/          # Router & Providers
-│   │   │   ├── components/   # UI Primitives (Button, Modal, Input, Table)
-│   │   │   ├── db/           # Dexie IndexedDB Schema & Repository Layer
-│   │   │   ├── features/     # Modul Fitur (pos, products, reports, auth, settings)
-│   │   │   ├── lib/          # Helper (money, dates, csv, features)
-│   │   │   └── printing/     # ESC/POS byte builder & driver adapters
-│   │   ├── src-tauri/        # Shell Native Desktop (Tauri 2 + Rust)
-│   │   └── android/          # Shell Native Android (Capacitor + Java)
-│   └── landing/              # Halaman Beranda Publik & Showroom (React 19 + Vite)
-├── docs/                     # Dokumentasi Resmi & Panduan Pengguna
-└── .github/workflows/        # Otomasi CI/CD & Build Multi-Platform
+│   │   │   ├── app/          # App router and context providers
+│   │   │   ├── components/   # Shared UI primitives (Button, Modal, Input, Table)
+│   │   │   ├── db/           # Dexie IndexedDB schema and repository layer
+│   │   │   ├── features/     # Feature modules (pos, products, reports, auth, settings)
+│   │   │   ├── lib/          # Utility functions (money, dates, csv, features)
+│   │   │   └── printing/     # ESC/POS byte builder and driver adapters
+│   │   ├── src-tauri/        # Native desktop shell (Tauri 2 + Rust)
+│   │   └── android/          # Native Android shell (Capacitor + Java)
+│   └── landing/              # Marketing showcase and download site (React 19 + Vite)
+├── docs/                     # Official documentation and technical guides
+└── .github/workflows/        # CI/CD pipelines and multi-platform release builds
 ```
 
-### Rincian Teknologi (Tech Stack)
+### Technology Stack
 
-| Bagian               | Teknologi                     | Keterangan                                    |
-| :------------------- | :---------------------------- | :-------------------------------------------- |
-| **Language**         | TypeScript (Strict mode)      | 100% type-safe, no implicit any               |
-| **UI Framework**     | React 19 + Vite               | Performa tinggi, HMR instan, bundle ringkas   |
-| **Styling**          | Tailwind CSS v4               | Semantic design tokens, rasio kontras tinggi  |
-| **Database**         | Dexie.js (IndexedDB)          | Transaksi atomik, skema versi, 100% lokal     |
-| **State Management** | Zustand                       | State keranjang & sesi kasir yang ringan      |
-| **Validation**       | Zod + React Hook Form         | Validasi skema input & impor data ketat       |
-| **Typography**       | Plus Jakarta Sans             | Dibundel lokal, 100% bekerja offline          |
-| **Testing**          | Vitest + RTL + fake-indexeddb | **283 unit & integration tests lulus (100%)** |
-| **Desktop Shell**    | Tauri 2 (Rust)                | Ringan (~15 MB RAM), performa native          |
-| **Mobile Shell**     | Capacitor (Android)           | Akses native Bluetooth Classic printer        |
+| Layer                | Technology                    | Details                                                           |
+| :------------------- | :---------------------------- | :---------------------------------------------------------------- |
+| **Language**         | TypeScript (Strict mode)      | 100% type-safe codebase with zero untyped structures              |
+| **UI Framework**     | React 19 + Vite               | High rendering performance, instant HMR, minimal bundle size      |
+| **Styling**          | Tailwind CSS v4               | Semantic design tokens with high-contrast accessibility standards |
+| **Local Database**   | Dexie.js (IndexedDB)          | Atomic transactions, schema version upgrades, 100% client-side    |
+| **State Management** | Zustand                       | Lightweight UI and shopping cart state management                 |
+| **Validation**       | Zod + React Hook Form         | Strict schema validation for user input and data imports          |
+| **Typography**       | Plus Jakarta Sans             | Bundled locally for complete offline availability                 |
+| **Test Suite**       | Vitest + RTL + fake-indexeddb | **283 unit & integration tests passing (100% pass rate)**         |
+| **Desktop Shell**    | Tauri 2 (Rust)                | Minimal memory footprint (~15 MB RAM) with native hardware access |
+| **Mobile Shell**     | Capacitor (Android)           | Native Bluetooth Classic SPP printer integration                  |
 
 ---
 
-## 💻 Panduan Pengembang (Developer Quickstart)
+## Developer Quickstart
 
-### Prasyarat
+### Prerequisites
 
-- [Node.js](https://nodejs.org/) v20 atau lebih baru
-- [pnpm](https://pnpm.io/) v10 atau v12
-- [Rust](https://rustup.rs/) _(opsional, untuk build desktop Tauri)_
-- [Android Studio & JDK 21](https://developer.android.com/studio) _(opsional, untuk build APK)_
+- [Node.js](https://nodejs.org/) v20 or newer
+- [pnpm](https://pnpm.io/) v10 or v12
+- [Rust](https://rustup.rs/) _(optional, required only for building Tauri desktop apps)_
+- [Android Studio & JDK 21](https://developer.android.com/studio) _(optional, required only for building Android APKs)_
 
-### Memulai Pengembangan Lokal
+### Local Setup
 
 ```bash
-# 1. Klon repositori
+# 1. Clone the repository
 git clone https://github.com/Fizm00/POS-KasirTerbuka.git
 cd POS-KasirTerbuka
 
-# 2. Pasang dependensi monorepo
+# 2. Install workspace dependencies
 pnpm install
 
-# 3. Jalankan server pengembang aplikasi kasir
+# 3. Start the cashier development server
 pnpm dev:pos
 
-# 4. (Opsional) Jalankan landing page di terminal terpisah
+# 4. (Optional) Start the marketing landing page in another terminal
 pnpm dev:landing
 ```
 
-Buka `http://localhost:5173` di peramban Anda. Pada kunjungan pertama, wizard pengaturan awal akan memandu Anda membuat nama toko dan PIN admin.
+Open `http://localhost:5173` in your browser. On first launch, the setup wizard will prompt you to configure your store name and create your admin PIN.
 
-### Perintah Pengujian & Kualitas Kode
+### Testing and Code Quality
 
 ```bash
-pnpm -r test           # Menjalankan seluruh test suite (Vitest)
-pnpm -r typecheck      # Memeriksa static typecheck TypeScript
-pnpm -r lint           # Memeriksa kepatuhan kode dengan ESLint
-pnpm format            # Merapikan format kode dengan Prettier
-pnpm --filter pos tauri dev   # Menjalankan aplikasi desktop Tauri
-pnpm --filter pos cap sync    # Sinkronisasi build web ke Capacitor Android
+pnpm -r test                  # Run unit and integration tests across all packages (Vitest)
+pnpm -r typecheck             # Perform TypeScript type-checking
+pnpm -r lint                  # Run ESLint validation
+pnpm format                   # Format code using Prettier
+pnpm --filter pos tauri dev   # Run the native Tauri desktop app in dev mode
+pnpm --filter pos cap sync    # Synchronize web assets to Capacitor Android
 ```
 
 ---
 
-## 📚 Indeks Dokumentasi Lengkap
+## Documentation Index
 
-Dokumentasi teknis dan panduan operasional tersedia di folder [`docs/`](docs/):
+Detailed operational and technical documentation is maintained in the [`docs/`](docs/) directory:
 
-- 📖 [**Panduan Pengguna (User Guide)**](docs/user-guide.md) — Panduan lengkap penggunaan kasir, transaksi, dan pelaporan dalam Bahasa Indonesia.
-- 📱 [**Panduan Instalasi Android**](docs/android-setup.md) — Langkah pemasangan APK, izin Bluetooth, dan Bluetooth printer setup.
-- 🖥️ [**Panduan Instalasi Desktop**](docs/desktop-installation.md) — Instalasi Windows, macOS, dan Linux serta bypass SmartScreen.
-- 🖨️ [**Panduan Printer Termal (ESC/POS)**](docs/printer-setup.md) — Referensi teknis pengkabelan, baudrate, dan koneksi printer.
-- 📊 [**Format Spesifikasi Ekspor CSV**](docs/csv-export.md) — Struktur kolom dan format data ekspor transaksi & laporan.
-- 🤝 [**Panduan Berkontribusi**](docs/contributing.md) — Standar kontribusi, git commit, dan pembuatan pull request.
-
----
-
-## 🤝 Kontribusi
-
-Kasir Terbuka adalah proyek sumber terbuka yang didedikasikan untuk memberdayakan UMKM Indonesia melalui teknologi yang bebas, transparan, dan mandiri. Kontribusi dalam bentuk laporan bug, perbaikan kode, penerjemahan, maupun pengujian printer termal sangat diapresiasi!
-
-Silakan baca [Panduan Kontribusi](docs/contributing.md) sebelum mengajukan Pull Request.
+- [**User Guide (Panduan Pengguna)**](docs/user-guide.md) — Comprehensive user manual for store operations, transactions, and reports.
+- [**Android Setup & Sideloading**](docs/android-setup.md) — APK installation, Bluetooth runtime permissions, and printer pairing.
+- [**Desktop Installation Guide**](docs/desktop-installation.md) — Windows, macOS, and Linux setup instructions and SmartScreen verification.
+- [**Thermal Printer Setup (ESC/POS)**](docs/printer-setup.md) — Hardware wiring, serial baud rates, and printer connectivity.
+- [**CSV Export Specification**](docs/csv-export.md) — Column schema definitions for exported reports and transaction data.
+- [**Contributing Guidelines**](docs/contributing.md) — Coding standards, git conventions, and pull request workflows.
 
 ---
 
-## 📄 Lisensi
+## Contributing
 
-Proyek ini dilisensikan di bawah ketentuan **[GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)**.
+Kasir Terbuka is an open-source project dedicated to supporting independent businesses and small shops with accessible, private, and durable software. Contributions in the form of bug reports, code improvements, translations, and printer hardware testing are welcome.
 
-Hak Cipta © 2026 **Kontributor Kasir Terbuka**.
+Please review the [Contributing Guidelines](docs/contributing.md) before submitting a pull request.
+
+---
+
+## License
+
+This project is licensed under the **[GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE)**.
+
+Copyright &copy; 2026 **Kasir Terbuka Contributors**.
